@@ -10,6 +10,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Memuat ikon (untuk search, filter) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/lucide.min.js" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide-react@0.263.0/dist/umd/lucide-react.js"></script>
     
     <style>
         /* Menggunakan font Inter sebagai default */
@@ -17,7 +20,17 @@
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            background-color: #f7f9ff; /* BG Biru/Ungu yang sangat muda, lebih segar */
+            background-color: #f7f9ff; /* BG Biru/Ungu yang sangat muda */
+            height: 100vh;
+            overflow: hidden; /* Mencegah body di-scroll */
+        }
+
+        /* Konten utama yang bisa di-scroll */
+        #screen-content {
+            height: 100vh;
+            overflow-y: auto;
+            /* Padding bawah untuk memberi ruang bagi nav bar */
+            padding-bottom: 120px; 
         }
 
         /* Scrollbar kustom */
@@ -25,6 +38,26 @@
         #screen-content::-webkit-scrollbar-track { background: #f1f1f1; }
         #screen-content::-webkit-scrollbar-thumb { background: #c5bbf2; border-radius: 10px; }
         #screen-content::-webkit-scrollbar-thumb:hover { background: #a092db; }
+
+        /* Scrollbar kustom untuk Histori Jurnal */
+        #journal-history-list::-webkit-scrollbar { width: 5px; }
+        #journal-history-list::-webkit-scrollbar-track { background: #e9e9e9; }
+        #journal-history-list::-webkit-scrollbar-thumb { background: #b0a8db; border-radius: 10px; }
+
+
+        /* Style untuk Nav Bar Bawah BARU */
+        .bottom-nav-btn {
+            transition: all 0.2s ease-in-out;
+            flex-basis: 0; /* Distribusi merata */
+            flex-grow: 1;
+        }
+        .bottom-nav-btn.active {
+            color: #4f46e5; /* indigo-600 */
+            transform: scale(1.1);
+        }
+        .bottom-nav-btn.active .nav-icon {
+            background-color: #e0e7ff; /* indigo-100 */
+        }
 
         /* Animasi untuk lingkaran pernapasan */
         @keyframes breathe {
@@ -69,65 +102,27 @@
             transform: translateX(100%);
         }
 
+        /* Perbaikan Carousel Quote (FIXED) */
+        .quote-slide {
+            flex-shrink: 0;
+            width: 100%;
+        }
+
     </style>
 </head>
-<body class="flex min-h-screen">
-
-    <!-- Navigasi Sidebar Kiri -->
-    <nav class="w-72 bg-white shadow-2xl flex flex-col p-6 sticky top-0 h-screen z-10">
-        <!-- Logo -->
-        <div class="flex items-center space-x-3 p-3 mb-8">
-            <div class="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path><path d="M12 12a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"></path><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path></svg>
-            </div>
-            <span class="text-2xl font-bold text-gray-900">SoulCare</span>
-        </div>
-
-        <div class="space-y-3 flex-1">
-            <!-- Tombol Home -->
-            <button id="nav-home" onclick="showPage('page-home')" class="nav-btn bg-indigo-100 text-indigo-700 p-4 rounded-lg active:scale-95 w-full flex items-center space-x-3 transition-all hover:scale-105">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <span class="text-base font-semibold">Dashboard</span>
-            </button>
-            <!-- Tombol Tes Awal -->
-            <button id="nav-test" onclick="showPage('page-test')" class="nav-btn text-gray-500 hover:bg-gray-100 p-4 rounded-lg active:scale-95 w-full flex items-center space-x-3 transition-all hover:scale-105">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
-                <span class="text-base font-semibold">Pusat Tes</span>
-            </button>
-            <!-- Tombol Jurnal -->
-            <button id="nav-journal" onclick="showPage('page-journal')" class="nav-btn text-gray-500 hover:bg-gray-100 p-4 rounded-lg active:scale-95 w-full flex items-center space-x-3 transition-all hover:scale-105">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                <span class="text-base font-semibold">Jurnal Harian</span>
-            </button>
-            <!-- Tombol Games -->
-            <button id="nav-games" onclick="showPage('page-games')" class="nav-btn text-gray-500 hover:bg-gray-100 p-4 rounded-lg active:scale-95 w-full flex items-center space-x-3 transition-all hover:scale-105">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M12 12m-4 0a4 4 0 1 0 8 0 4 4 0 1 0-8 0"></path><path d="M12 12m-10 0a10 10 0 1 0 20 0 10 10 0 1 0-20 0"></path></svg>
-                <span class="text-base font-semibold">Mini-Games</span>
-            </button>
-            <!-- Tombol AI Chat -->
-            <button id="nav-chat" onclick="showPage('page-chat')" class="nav-btn text-gray-500 hover:bg-gray-100 p-4 rounded-lg active:scale-95 w-full flex items-center space-x-3 transition-all hover:scale-105">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M12 12a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"/><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
-                <span class="text-base font-semibold">Soul-AI Chat</span>
-            </button>
-            <!-- Tombol Profil -->
-            <button id="nav-profile" onclick="showPage('page-profile')" class="nav-btn text-gray-500 hover:bg-gray-100 p-4 rounded-lg active:scale-95 w-full flex items-center space-x-3 transition-all hover:scale-105">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                <span class="text-base font-semibold">Profil & Poin</span>
-            </button>
-        </div>
-        <!-- Link Dashboard Konselor -->
-        <div class="mt-auto">
-             <button class="w-full text-left text-sm text-gray-400 hover:text-indigo-600 p-3 rounded-lg hover:bg-gray-100 transition-all">
-                Masuk sebagai Konselor
-            </button>
-        </div>
-    </nav>
+<body class="min-h-screen">
 
     <!-- Konten Layar Aplikasi (Bisa di-scroll) -->
-    <main id="screen-content" class="flex-1 overflow-y-auto p-12">
+    <main id="screen-content" class="relative"> 
         
+        <!-- Blob Gradien Latar Belakang */ -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+            <div class="absolute -top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-300 to-indigo-300 rounded-full opacity-20 blur-3xl"></div>
+            <div class="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-r from-teal-200 to-blue-200 rounded-full opacity-20 blur-3xl"></div>
+        </div>
+
         <!-- Halaman 1: Home/Dashboard (Default) -->
-        <div id="page-home" class="page space-y-10">
+        <div id="page-home" class="page p-12 space-y-8">
             <!-- Header Sapaan -->
             <div>
                 <h1 class="text-4xl font-bold text-gray-900">Selamat Datang, Dona!</h1>
@@ -136,7 +131,63 @@
             
             <!-- Grid Dashboard -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Kolom Kiri (Gamifikasi) -->
+                <!-- Kolom Kiri (Aktivitas Utama) -->
+                <div class="lg:col-span-2 space-y-6">
+                     <!-- Insight dari Soul-AI (Sesuai Gambar) -->
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-2xl shadow-lg flex items-center space-x-5 card-hover relative overflow-hidden">
+                        <div class="flex-shrink-0 z-10">
+                            <!-- Icon AI (mirip gambar) -->
+                            <div class="p-3 bg-white/20 rounded-xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path><path d="M12 12a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"></path><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path></svg>
+                            </div>
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-xl">Insight dari Soul-AI</h3>
+                            <p class="mt-1 text-sm opacity-90">Pola jurnalmu 3 hari ini menunjukkan kamu sedang fokus pada target. Hebat! Tapi, jangan lupa istirahat. Coba main "Tarik Napas" 5 menit hari ini.</p>
+                        </div>
+                        <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full opacity-50 z-0"></div>
+                    </div>
+                    
+                    <!-- Quote Carousel (FIXED) -->
+                    <div id="quote-carousel-container" class="relative bg-white p-6 rounded-2xl shadow-lg overflow-hidden h-40 card-hover">
+                        <div id="quote-track" class="absolute top-0 left-0 h-full flex transition-opacity duration-700 ease-in-out">
+                            <!-- Kutipan akan di-generate oleh JS -->
+                        </div>
+                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2" id="quote-dots">
+                            <!-- Dots akan di-generate oleh JS -->
+                        </div>
+                    </div>
+
+                    <!-- Hasil Tes Terakhir -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg card-hover">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Hasil Tes Terakhir</h3>
+                        <p class="text-gray-500 mb-4">Ini adalah ringkasan dari tes terakhirmu. Kamu bisa mengambil tes ulang kapanpun.</p>
+                        <!-- Chart dummy sederhana -->
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <span class="w-24 font-medium text-gray-600">Stres</span>
+                                <div class="flex-1 bg-gray-200 rounded-full h-4">
+                                    <div class="bg-gradient-to-r from-red-400 to-red-600 h-4 rounded-full" style="width: 70%"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-24 font-medium text-gray-600">Kecemasan</span>
+                                <div class="flex-1 bg-gray-200 rounded-full h-4">
+                                    <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 h-4 rounded-full" style="width: 40%"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-24 font-medium text-gray-600">Depresi</span>
+                                <div class="flex-1 bg-gray-200 rounded-full h-4">
+                                    <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-4 rounded-full" style="width: 25%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="showPage('page-result')" class="mt-5 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Lihat Detail Hasil &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan (Gamifikasi) -->
                 <div class="lg:col-span-1 space-y-6">
                     <!-- Pilihan Vibe Cepat -->
                     <div class="bg-white p-6 rounded-2xl shadow-lg">
@@ -173,146 +224,95 @@
                         <p class="text-gray-500">Hari berturut-turut!</p>
                     </div>
                 </div>
-
-                <!-- Kolom Kanan (Aktivitas) -->
-                <div class="lg:col-span-2 space-y-6">
-                    
-                    <!-- Insight dari Soul-AI (BARU, Sesuai Gambar) -->
-                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-2xl shadow-lg flex items-center space-x-5 card-hover relative overflow-hidden">
-                        <div class="flex-shrink-0 z-10">
-                            <!-- Icon AI (mirip gambar) -->
-                            <div class="p-3 bg-white/20 rounded-xl">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path><path d="M12 12a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"></path><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path></svg>
-                            </div>
-                        </div>
-                        <div class="relative z-10">
-                            <h3 class="font-bold text-xl">Insight dari Soul-AI</h3>
-                            <p class="mt-1 text-sm opacity-90">Pola jurnalmu 3 hari ini menunjukkan kamu sedang fokus pada target. Hebat! Tapi, jangan lupa istirahat. Coba main "Tarik Napas" 5 menit hari ini.</p>
-                        </div>
-                        <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full opacity-50 z-0"></div>
-                    </div>
-
-                    <!-- Hasil Tes Terakhir -->
-                    <div class="bg-white p-6 rounded-2xl shadow-lg card-hover">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Hasil Tes Terakhir</h3>
-                        <p class="text-gray-500 mb-4">Ini adalah ringkasan dari tes terakhirmu. Kamu bisa mengambil tes ulang kapanpun.</p>
-                        <!-- Chart dummy sederhana -->
-                        <div class="space-y-3">
-                            <div class="flex items-center">
-                                <span class="w-24 font-medium text-gray-600">Stres</span>
-                                <div class="flex-1 bg-gray-200 rounded-full h-4">
-                                    <div class="bg-gradient-to-r from-red-400 to-red-600 h-4 rounded-full" style="width: 70%"></div>
-                                </div>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="w-24 font-medium text-gray-600">Kecemasan</span>
-                                <div class="flex-1 bg-gray-200 rounded-full h-4">
-                                    <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 h-4 rounded-full" style="width: 40%"></div>
-                                </div>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="w-24 font-medium text-gray-600">Depresi</span>
-                                <div class="flex-1 bg-gray-200 rounded-full h-4">
-                                    <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-4 rounded-full" style="width: 25%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <button onclick="showPage('page-result')" class="mt-5 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Lihat Detail Hasil &rarr;</button>
-                    </div>
-
-                    <!-- Menu Aktivitas Cepat -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Navigasi ke Jurnal -->
-                        <div onclick="showPage('page-journal')" class="flex items-center bg-white p-6 rounded-2xl shadow-lg cursor-pointer card-hover border-2 border-transparent hover:border-yellow-400">
-                            <div class="p-4 bg-yellow-100 rounded-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-700"><path d="M12 20h9a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7z"></path><line x1="16" x2="8" y1="2" y2="2"></line><line x1="16" x2="8" y1="6" y2="6"></line><line x1="10" x2="10" y1="14" y2="14"></line></svg>
-                            </div>
-                            <div class="ml-5">
-                                <h4 class="text-xl font-semibold text-gray-900">Jurnal Harian</h4>
-                                <p class="text-base text-gray-500">Tuliskan +10 Poin</p>
-                            </div>
-                        </div>
-                        <!-- Navigasi ke Mini Games -->
-                        <div onclick="showPage('page-games')" class="flex items-center bg-white p-6 rounded-2xl shadow-lg cursor-pointer card-hover border-2 border-transparent hover:border-teal-400">
-                            <div class="p-4 bg-teal-100 rounded-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-700"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V10M18 4h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><path d="M6 18v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z"></path></svg>
-                            </div>
-                            <div class="ml-5">
-                                <h4 class="text-xl font-semibold text-gray-900">Mini-Games</h4>
-                                <p class="text-base text-gray-500">Mainkan +5 Poin</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-
-        <!-- Halaman 2: Jurnal Harian (LAYOUT DIPERBAIKI) -->
-        <div id="page-journal" class="page space-y-6 flex flex-col items-center" style="display: none;">
+        
+        <!-- Halaman 2: Jurnal Harian (LAYOUT BARU DENGAN HISTORI) -->
+        <div id="page-journal" class="page p-12 space-y-6 hidden">
             <!-- Header Halaman -->
-            <div class="w-full max-w-3xl">
+            <div class="w-full">
                 <h1 class="text-4xl font-bold text-gray-900">Jurnal Harian</h1>
             </div>
-
-            <!-- Pelacak Mood (BARU) -->
-            <div class="bg-white p-6 rounded-2xl shadow-lg max-w-3xl w-full">
-                <h3 class="font-semibold text-gray-600 mb-4 text-lg">Bagaimana mood-mu untuk entri ini?</h3>
-                <div class="flex justify-around" id="mood-selection">
-                    <button onclick="selectMood('Sangat Sedih', this)" class="mood-btn p-3 rounded-full hover:bg-red-100 transition-all active:scale-95 ring-0 ring-red-400">
-                        <span class="text-4xl">😭</span>
-                    </button>
-                    <button onclick="selectMood('Sedih', this)" class="mood-btn p-3 rounded-full hover:bg-yellow-100 transition-all active:scale-95 ring-0 ring-yellow-400">
-                        <span class="text-4xl">😟</span>
-                    </button>
-                    <button onclick="selectMood('Biasa Saja', this)" class="mood-btn p-3 rounded-full hover:bg-blue-100 transition-all active:scale-95 ring-0 ring-blue-400">
-                        <span class="text-4xl">😌</span>
-                    </button>
-                    <button onclick="selectMood('Senang', this)" class="mood-btn p-3 rounded-full hover:bg-indigo-100 transition-all active:scale-95 ring-0 ring-indigo-400">
-                        <span class="text-4xl">😊</span>
-                    </button>
-                    <button onclick="selectMood('Sangat Senang', this)" class="mood-btn p-3 rounded-full hover:bg-green-100 transition-all active:scale-95 ring-0 ring-green-400">
-                        <span class="text-4xl">🤩</span>
+            
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Kolom Kiri: Input Jurnal -->
+                <div class="lg:w-1/2 space-y-6">
+                    <!-- Pelacak Mood -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                        <h3 class="font-semibold text-gray-600 mb-4 text-lg text-center">Bagaimana mood-mu untuk entri ini?</h3>
+                        <div class="flex justify-around" id="mood-selection">
+                            <button onclick="selectMood('😭', this)" class="mood-btn p-3 rounded-full hover:bg-red-100 transition-all active:scale-95 ring-0 ring-red-400">
+                                <span class="text-4xl">😭</span>
+                            </button>
+                             <button onclick="selectMood('😟', this)" class="mood-btn p-3 rounded-full hover:bg-yellow-100 transition-all active:scale-95 ring-0 ring-yellow-400">
+                                <span class="text-4xl">😟</span>
+                            </button>
+                             <button onclick="selectMood('😌', this)" class="mood-btn p-3 rounded-full hover:bg-blue-100 transition-all active:scale-95 ring-0 ring-blue-400">
+                                <span class="text-4xl">😌</span>
+                            </button>
+                             <button onclick="selectMood('😊', this)" class="mood-btn p-3 rounded-full hover:bg-indigo-100 transition-all active:scale-95 ring-0 ring-indigo-400">
+                                <span class="text-4xl">😊</span>
+                            </button>
+                            <button onclick="selectMood('🤩', this)" class="mood-btn p-3 rounded-full hover:bg-green-100 transition-all active:scale-95 ring-0 ring-green-400">
+                                <span class="text-4xl">🤩</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Kartu Pertanyaan Reflektif -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                        <h3 class="font-semibold text-gray-500">Pertanyaan Hari Ini:</h3>
+                        <p id="journal-prompt" class="text-xl font-medium text-gray-900 mt-2">Apa satu hal kecil yang kamu syukuri hari ini?</p>
+                    </div>
+                    <!-- Text Area -->
+                    <textarea id="journal-input" class="w-full h-40 p-5 text-base border border-gray-200 rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Tuliskan ceritamu di sini..."></textarea>
+                    <!-- Pengingat -->
+                    <div class="bg-white p-5 rounded-xl shadow-lg flex justify-between items-center">
+                        <h3 class="text-base font-semibold text-gray-700">Setel Pengingat Jurnal Harian</h3>
+                        <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="toggle" id="journal-reminder" class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                            <label for="journal-reminder" class="toggle-label block overflow-hidden h-7 rounded-full bg-gray-300 cursor-pointer transition-colors duration-200 ease-in-out">
+                                 <span class="toggle-dot absolute left-0 inline-block w-7 h-7 bg-white rounded-full shadow-md transform transition-transform duration-200 ease-in-out"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Tombol Simpan -->
+                    <button onclick="saveJournal()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-4 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 active:scale-95">
+                        Simpan & Dapatkan 10 Poin 🔥
                     </button>
                 </div>
-            </div>
-
-            <!-- Kartu Pertanyaan Reflektif (Dummy) -->
-            <div class="bg-white p-6 rounded-2xl shadow-lg max-w-3xl w-full">
-                <h3 class="font-semibold text-gray-500">Pertanyaan Hari Ini:</h3>
-                <p id="journal-prompt" class="text-2xl font-medium text-gray-900 mt-2">Apa satu hal kecil yang kamu syukuri hari ini?</p>
-            </div>
-
-            <!-- Text Area untuk Menulis -->
-            <textarea id="journal-input" class="w-full max-w-3xl h-64 p-5 text-lg border border-gray-200 rounded-2xl shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Tuliskan ceritamu di sini..."></textarea>
-
-            <!-- Pengingat (BARU) -->
-            <div class="bg-white p-6 rounded-2xl shadow-lg max-w-3xl w-full flex justify-between items-center">
-                <h3 class="text-lg font-semibold text-gray-700">Setel Pengingat Jurnal Harian</h3>
-                <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
-                    <input type="checkbox" name="toggle" id="journal-reminder" class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-                    <label for="journal-reminder" class="toggle-label block overflow-hidden h-7 rounded-full bg-gray-300 cursor-pointer transition-colors duration-200 ease-in-out">
-                         <span class="toggle-dot absolute left-0 inline-block w-7 h-7 bg-white rounded-full shadow-md transform transition-transform duration-200 ease-in-out"></span>
-                    </label>
+                
+                <!-- Kolom Kanan: Histori Jurnal (BARU) -->
+                <div class="lg:w-1/2 bg-white p-6 rounded-2xl shadow-lg flex flex-col">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Histori Jurnal</h3>
+                    <!-- Search & Filter -->
+                    <div class="flex flex-col md:flex-row gap-3 mb-4">
+                        <div class="relative flex-grow">
+                            <input type="search" id="journal-search" onkeyup="renderJournalHistory()" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Cari di jurnal...">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </div>
+                        <select id="journal-sort" onchange="renderJournalHistory()" class="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                            <option value="terbaru">Sortir: Terbaru</option>
+                            <option value="terlama">Sortir: Terlama</option>
+                        </select>
+                    </div>
+                    <!-- Daftar Histori -->
+                    <div id="journal-history-list" class="flex-1 space-y-4 overflow-y-auto pr-2" style="max-height: 500px;">
+                        <!-- Histori akan di-render oleh JS di sini -->
+                    </div>
                 </div>
             </div>
-
-            <!-- Tombol Simpan -->
-            <button onclick="saveJournal()" class="w-full max-w-3xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-4 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 active:scale-95">
-                Simpan & Dapatkan 10 Poin 🔥
-            </button>
         </div>
 
-        <!-- Halaman 3: Pilihan Mini-Games (LEBIH COLORFUL) -->
-        <div id="page-games" class="page space-y-8" style="display: none;">
+        <!-- Halaman 3: Pilihan Mini-Games -->
+        <div id="page-games" class="page p-12 space-y-8 hidden">
             <!-- Header Halaman -->
             <div>
                 <h1 class="text-4xl font-bold text-gray-900">Permainan Reflektif</h1>
                 <p class="text-lg text-gray-500 mt-1">Latih pikiranmu dengan cara yang seru dan dapatkan poin!</p>
             </div>
-
             <!-- Daftar Game -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Game 1: Tarik Napas (Fungsional) -->
+                <!-- Game 1: Tarik Napas -->
                 <div onclick="showPage('page-game-breathe')" class="bg-white p-6 rounded-2xl shadow-lg cursor-pointer card-hover border-4 border-transparent hover:border-blue-300 space-y-4">
                     <div class="p-4 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg w-min shadow-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.4 18.2c.3-.2.6-.4.8-.7a4.3 4.3 0 0 0 1.2-3.4c0-1.6-1-3-2.4-3.8"></path><path d="M12 2a4.3 4.3 0 0 0-1.2 3.4c0 1.6 1 3 2.4 3.8"></path><path d="M7.6 18.2c-.3-.2-.6-.4-.8-.7a4.3 4.3 0 0 1-1.2-3.4c0-1.6 1-3 2.4-3.8"></path><path d="M12 22a4.3 4.3 0 0 1 1.2-3.4c0-1.6-1-3-2.4-3.8"></path><path d="M2 10.3a4.3 4.3 0 0 0 1.9 3.5 4.3 4.3 0 0 0 5.2.3"></path><path d="M22 10.3a4.3 4.3 0 0 1-1.9 3.5 4.3 4.3 0 0 1-5.2.3"></path><circle cx="12" cy="12" r="2"></circle></svg>
@@ -321,7 +321,7 @@
                     <p class="text-base text-gray-500">Latihan 1 menit untuk lebih tenang dan fokus.</p>
                     <span class="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">+5 Poin</span>
                 </div>
-                <!-- Game 2: Filter Pikiran (Sekarang Fungsional) -->
+                <!-- Game 2: Filter Pikiran -->
                 <div onclick="showPage('page-game-filter')" class="bg-white p-6 rounded-2xl shadow-lg cursor-pointer card-hover border-4 border-transparent hover:border-green-300 space-y-4">
                     <div class="p-4 bg-gradient-to-br from-green-400 to-green-600 rounded-lg w-min shadow-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 3 3 3-3"></path><path d="m3 12 3 3 3-3"></path><path d="m3 18 3 3 3-3"></path><line x1="12" y1="6" x2="21" y2="6"></line><line x1="12" y1="12" x2="21" y2="12"></line><line x1="12" y1="18" x2="21" y2="18"></line></svg>
@@ -341,9 +341,9 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- Halaman 4: Mini-Game Tarik Napas (Fungsional) -->
-        <div id="page-game-breathe" class="page" style="display: none;">
+        <div id="page-game-breathe" class="page p-12 hidden">
             <!-- Header Halaman -->
             <div class="flex items-center space-x-3 mb-8">
                 <button onclick="stopBreatheGame(); showPage('page-games');" class="p-2 rounded-full hover:bg-gray-200 active:scale-95">
@@ -351,7 +351,6 @@
                 </button>
                 <h1 class="text-4xl font-bold text-gray-900">Tarik Napas</h1>
             </div>
-
             <!-- Konten Game -->
             <div class="flex flex-col items-center justify-center h-[60vh] text-center bg-white rounded-2xl shadow-lg">
                 <div class="relative w-64 h-64 flex items-center justify-center">
@@ -364,7 +363,7 @@
         </div>
 
         <!-- Halaman 5: Mini-Game Filter Pikiran -->
-        <div id="page-game-filter" class="page" style="display: none;">
+        <div id="page-game-filter" class="page p-12 hidden">
             <!-- Header Halaman -->
             <div class="flex items-center space-x-3 mb-8">
                 <button onclick="showPage('page-games');" class="p-2 rounded-full hover:bg-gray-200 active:scale-95">
@@ -372,16 +371,13 @@
                 </button>
                 <h1 class="text-4xl font-bold text-gray-900">Filter Pikiran</h1>
             </div>
-
             <!-- Konten Game -->
             <div class="flex flex-col items-center justify-center h-[60vh] text-center bg-white rounded-2xl shadow-lg p-10">
                 <p class="text-2xl text-gray-600">Apakah pikiran ini...</p>
-                
                 <!-- Kartu Pikiran -->
                 <div id="thought-card" class="thought-card bg-gray-100 p-8 rounded-2xl shadow-inner w-full max-w-lg my-6 min-h-[150px] flex items-center justify-center">
                     <p id="thought-text" class="text-3xl font-medium text-gray-800">Saya pasti akan gagal dalam presentasi ini.</p>
                 </div>
-
                 <!-- Tombol Pilihan -->
                 <div class="w-full max-w-lg flex space-x-4">
                     <button onclick="checkThought(false)" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-4 px-5 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
@@ -391,20 +387,17 @@
                         Bermanfaat
                     </button>
                 </div>
-
                 <!-- Feedback -->
                 <p id="filter-feedback" class="text-2xl font-semibold h-10 mt-6"></p>
             </div>
         </div>
 
-
         <!-- Halaman 6: Profil (Mock) -->
-        <div id="page-profile" class="page space-y-8" style="display: none;">
+        <div id="page-profile" class="page p-12 space-y-8 hidden">
              <!-- Header Halaman -->
             <div>
                 <h1 class="text-4xl font-bold text-gray-900">Profil & Pencapaian</h1>
             </div>
-            
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Kolom Kiri: Info & Streak -->
                 <div class="lg:col-span-1 space-y-6">
@@ -413,7 +406,6 @@
                         <h2 class="text-3xl font-semibold">Dona Haryanto</h2>
                         <p class="text-base text-gray-500">Bergabung Sejak 2025</p>
                     </div>
-
                     <div class="bg-white p-6 rounded-xl shadow-lg text-center card-hover">
                         <h3 class="text-xl font-semibold text-gray-800">Streak Jurnal</h3>
                         <div class="flex items-center justify-center space-x-3 mt-3">
@@ -422,46 +414,31 @@
                             <span class="text-lg text-gray-500">hari!</span>
                         </div>
                     </div>
-
                     <div class="bg-white p-6 rounded-xl shadow-lg text-center card-hover">
                         <h3 class="text-xl font-semibold text-gray-800">Total Poin Refleksi</h3>
                         <span id="total-points" class="text-5xl font-bold text-indigo-600 mt-3 block">120</span>
                     </div>
                 </div>
-
                 <!-- Kolom Kanan: Pencapaian -->
                 <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg">
                      <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Lencana Pencapaian</h3>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                        <!-- Badge 1 -->
-                        <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105">
+                        <!-- Badges ... -->
+                        <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow">
                             <span class="text-6xl">🧘</span>
                             <p class="text-md font-semibold text-gray-700 mt-2">Pikiran Tenang</details>
-                            <p class="text-sm text-gray-500">Selesaikan 5x 'Tarik Napas'</p>
                         </div>
-                        <!-- Badge 2 -->
-                        <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105">
+                        <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow">
                             <span class="text-6xl">✍️</span>
                             <p class="text-md font-semibold text-gray-700 mt-2">Penulis Jurnal</details>
-                            <p class="text-sm text-gray-500">Tulis jurnal 3 hari beruntun</p>
                         </div>
-                         <!-- Badge 3 -->
-                        <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105">
+                        <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow">
                             <span class="text-6xl">🧠</span>
                             <p class="text-md font-semibold text-gray-700 mt-2">Penyaring Pikiran</details>
-                            <p class="text-sm text-gray-500">Mainkan 10x 'Filter Pikiran'</smap>
                         </div>
-                        <!-- Badge 4 (Terkunci) -->
-                        <div class="text-center p-4 bg-gray-100 rounded-lg opacity-40 transition-all hover:scale-105">
+                        <div class="text-center p-4 bg-gray-100 rounded-lg opacity-40 transition-all hover:scale-105 shadow">
                             <span class="text-6xl">💪</span>
                             <p class="text-md font-semibold text-gray-700 mt-2">Mental Kuat</details>
-                            <p class="text-sm text-gray-500">Streak 7 hari & 1000 Poin</p>
-                        </div>
-                        <!-- Badge 5 (Terkunci) -->
-                        <div class="text-center p-4 bg-gray-100 rounded-lg opacity-40 transition-all hover:scale-105">
-                            <span class="text-6xl">☀️</span>
-                            <p class="text-md font-semibold text-gray-700 mt-2">Pagi Positif</details>
-                            <p class="text-sm text-gray-500">Jurnal sebelum jam 8 pagi</p>
                         </div>
                     </div>
                 </div>
@@ -469,82 +446,65 @@
         </div>
 
         <!-- Halaman 7: Tes Awal (DIROMBAK) -->
-        <div id="page-test" class="page" style="display: none;">
+        <div id="page-test" class="page p-12 hidden">
              <!-- Header Halaman -->
             <div>
                 <h1 class="text-4xl font-bold text-gray-900">Pusat Tes Kesehatan Mental</h1>
                 <p class="text-lg text-gray-500 mt-1">Pilih tes berdasarkan apa yang ingin kamu ketahui saat ini.</p>
             </div>
-
-            <!-- Pilihan Paket Tes (DIROMBAK per Kategori) -->
+            <!-- Pilihan Kategori Tes -->
             <div id="test-categories" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                
                 <!-- Kategori 1: Tes Stres -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-red-400 flex flex-col">
                     <div class="p-4 bg-gradient-to-br from-red-400 to-red-600 rounded-xl w-min mb-4 shadow-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="4" y2="8"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="20" y1="20" x2="20" y2="12"></line></svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-gray-900">Tes Stres</h3>
-                    <p class="text-gray-600 mt-2 flex-1">Merasa tertekan atau kewalahan akhir-akhir ini? Cek level stresmu di sini (5 pertanyaan).</p>
-                    <div class="mt-6">
-                        <span class="inline-block bg-red-100 text-red-800 text-sm font-medium px-3 py-1 rounded-full mb-4">+20 Poin</span>
-                        <button onclick="startTest('stres')" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
-                            Mulai Tes
-                        </button>
-                    </div>
+                    <p class="text-gray-600 mt-2 flex-1">Merasa tertekan? Cek level stresmu (5 pertanyaan).</p>
+                    <button onclick="startTest('stres')" class="mt-4 w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                        Mulai Tes
+                    </button>
                 </div>
-
                 <!-- Kategori 2: Tes Kecemasan -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-yellow-400 flex flex-col">
                     <div class="p-4 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl w-min mb-4 shadow-lg">
                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-gray-900">Tes Kecemasan</h3>
-                    <p class="text-gray-600 mt-2 flex-1">Sering merasa cemas, khawatir, atau panik? Tes ini (5 pertanyaan) bisa membantumu.</p>
-                    <div class="mt-6">
-                        <span class="inline-block bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full mb-4">+20 Poin</span>
-                        <button onclick="startTest('cemas')" class="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
-                            Mulai Tes
-                        </button>
-                    </div>
+                    <p class="text-gray-600 mt-2 flex-1">Sering cemas atau panik? Tes ini (5 pertanyaan) bisa membantu.</p>
+                    <button onclick="startTest('cemas')" class="mt-4 w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                        Mulai Tes
+                    </button>
                 </div>
-
                 <!-- Kategori 3: Tes Mood/Depresi -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-blue-400 flex flex-col">
                     <div class="p-4 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl w-min mb-4 shadow-lg">
                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
                     </div>
                     <h3 class="text-2xl font-semibold text-gray-900">Tes Mood (Depresi)</h3>
-                    <p class="text-gray-600 mt-2 flex-1">Merasa sedih atau kehilangan minat belakangan ini? Cek mood-mu di sini (5 pertanyaan).</p>
-                    <div class="mt-6">
-                        <span class="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full mb-4">+20 Poin</span>
-                        <button onclick="startTest('depresi')" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
-                            Mulai Tes
-                        </button>
-                    </div>
+                    <p class="text-gray-600 mt-2 flex-1">Merasa sedih belakangan ini? Cek mood-mu (5 pertanyaan).</p>
+                    <button onclick="startTest('depresi')" class="mt-4 w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                        Mulai Tes
+                    </button>
                 </div>
-
             </div>
-
-            <!-- Pertanyaan Kuis (disembunyikan, untuk Starter Tes) -->
-            <div id="test-questions" class="mt-6 bg-white p-8 rounded-2xl shadow-lg max-w-2xl w-full" style="display: none;">
-                <p class="text-sm font-medium text-indigo-600" id="question-progress">Pertanyaan 1 dari 5</p>
-                <h3 class="text-2xl font-semibold text-gray-900 mt-2" id="question-text">Saya merasa sulit untuk tenang dan rileks.</h3>
-                
-                <div class="space-y-3 mt-6" id="question-options">
+            <!-- Pertanyaan Kuis (disembunyikan) -->
+            <div id="test-questions" class="mt-6 bg-white p-8 rounded-2xl shadow-lg max-w-2xl w-full mx-auto" style="display: none;">
+                <p class="text-sm font-medium text-indigo-600 text-center" id="question-progress">Pertanyaan 1 dari 5</p>
+                <h3 class="text-2xl font-semibold text-gray-900 mt-2 text-center" id="question-text">Saya merasa sulit untuk tenang dan rileks.</h3>
+                <div class="space-y-3 mt-6 w-full mx-auto" id="question-options">
                     <!-- Opsi akan di-generate oleh JS -->
                 </div>
             </div>
         </div>
 
         <!-- Halaman 8: Hasil Tes -->
-         <div id="page-result" class="page" style="display: none;">
+         <div id="page-result" class="page p-12 hidden">
              <!-- Header Halaman -->
             <div>
                 <h1 class="text-4xl font-bold text-gray-900">Hasil Tes Anda</h1>
                 <p class="text-lg text-gray-500 mt-1">Berikut adalah ringkasan kondisimu selama seminggu terakhir.</p>
             </div>
-
             <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Kolom Kiri: Grafik -->
                 <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg">
@@ -600,13 +560,12 @@
          </div>
 
          <!-- Halaman 9: Soul-AI Chat -->
-        <div id="page-chat" class="page" style="display: none;">
+        <div id="page-chat" class="page p-12 hidden">
             <!-- Header Halaman -->
             <div>
                 <h1 class="text-4xl font-bold text-gray-900">Soul-AI Chat</h1>
                 <p class="text-lg text-gray-500 mt-1">Teman refleksi digitalmu. Aman, anonim, dan selalu ada.</p>
             </div>
-
             <!-- Konten Chat -->
             <div class="mt-6 bg-white h-[65vh] rounded-2xl shadow-lg flex flex-col">
                 <!-- Area Pesan -->
@@ -631,8 +590,54 @@
             </div>
         </div>
 
-
     </main>
+
+    <!-- Navigasi Bawah Horizontal (BARU) -->
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 z-50 bg-white shadow-[0_-4px_12px_rgba(0,0,0,0.05)] rounded-t-3xl p-4 flex justify-around items-start">
+        <!-- Tombol Home -->
+        <button id="nav-home-btn" onclick="showPage('page-home')" class="bottom-nav-btn p-2 flex flex-col items-center space-y-1 text-gray-500 active">
+             <span class="nav-icon p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+             </span>
+             <span class="text-xs font-semibold">Home</span>
+        </button>
+        <!-- Tombol Tes -->
+        <button id="nav-test-btn" onclick="showPage('page-test')" class="bottom-nav-btn p-2 flex flex-col items-center space-y-1 text-gray-500">
+             <span class="nav-icon p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+             </span>
+             <span class="text-xs font-semibold">Tes</span>
+        </button>
+        <!-- Tombol Jurnal -->
+        <button id="nav-journal-btn" onclick="showPage('page-journal')" class="bottom-nav-btn p-2 flex flex-col items-center space-y-1 text-gray-500">
+             <span class="nav-icon p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+             </span>
+             <span class="text-xs font-semibold">Jurnal</span>
+        </button>
+        <!-- Tombol Games -->
+        <button id="nav-games-btn" onclick="showPage('page-games')" class="bottom-nav-btn p-2 flex flex-col items-center space-y-1 text-gray-500">
+             <span class="nav-icon p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M12 12m-4 0a4 4 0 1 0 8 0 4 4 0 1 0-8 0"></path></svg>
+             </span>
+             <span class="text-xs font-semibold">Games</span>
+        </button>
+        <!-- Tombol Chat -->
+        <button id="nav-chat-btn" onclick="showPage('page-chat')" class="bottom-nav-btn p-2 flex flex-col items-center space-y-1 text-gray-500">
+             <span class="nav-icon p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+             </span>
+             <span class="text-xs font-semibold">Chat AI</span>
+        </button>
+         <!-- Tombol Profil -->
+        <button id="nav-profile-btn" onclick="showPage('page-profile')" class="bottom-nav-btn p-2 flex flex-col items-center space-y-1 text-gray-500">
+             <span class="nav-icon p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+             </span>
+             <span class="text-xs font-semibold">Profil</span>
+        </button>
+    </nav>
+
 
     <!-- Custom Alert/Notifikasi (pojok kanan atas) -->
     <div id="custom-alert" class="fixed top-6 right-6 max-w-sm w-full z-50 opacity-0 -translate-y-10 scale-95 pointer-events-none">
@@ -652,47 +657,84 @@
     <script>
         // --- DATA GLOBAL & KONTROL NAVIGASI ---
         const pages = document.querySelectorAll('.page');
-        const navButtons = document.querySelectorAll('.nav-btn');
+        const navButtons = document.querySelectorAll('.bottom-nav-btn');
         let currentBreatheInterval = null;
+        let quoteInterval = null; // Untuk quote carousel
+        let currentQuoteIndex = 0;
         let userStreak = 5; 
         let userPoints = 120; // Poin gamifikasi
         let currentTestQuestion = 0;
         let testAnswers = {}; // Menyimpan jawaban tes
         let currentTestQuestions = []; // Akan diisi oleh startTest
+        let currentMood = '😌'; // Mood default
 
+        // Data dummy untuk histori jurnal (BARU)
+        let journalHistoryData = [
+            {
+                id: 1,
+                date: '2025-10-31T10:30:00',
+                mood: '😊',
+                question: "Apa satu hal kecil yang kamu syukuri hari ini?",
+                answer: "Aku bersyukur bisa sarapan enak pagi ini dan cuacanya cerah banget."
+            },
+            {
+                id: 2,
+                date: '2025-10-30T21:15:00',
+                mood: '😟',
+                question: "Apa tantangan terbesar yang kamu hadapi hari ini?",
+                answer: "Presentasi di depan kelas tadi bikin cemas banget, tapi untungnya semua lancar. Lega banget."
+            },
+            {
+                id: 3,
+                date: '2025-10-29T18:00:00',
+                mood: '😌',
+                question: "Siapa orang yang membuatmu tersenyum hari ini?",
+                answer: "Waktu lagi suntuk, tiba-tiba teman lama chat ngajak main. Jadi senyum-senyum sendiri."
+            }
+        ];
+
+        // --- KONTROL HALAMAN (GANTI SISTEM KE PAGE, BUKAN MODAL) ---
         function showPage(pageId) {
-            pages.forEach(page => { page.style.display = 'none'; });
+            // Sembunyikan semua halaman
+            pages.forEach(page => { page.classList.add('hidden'); });
+            
+            // Tampilkan halaman yang dituju
             const targetPage = document.getElementById(pageId);
-            if (targetPage) { targetPage.style.display = 'block'; }
+            if (targetPage) { 
+                targetPage.classList.remove('hidden'); 
+            }
 
             // Hentikan interval spesifik halaman
             stopBreatheGame();
-            
+            stopQuoteCarousel();
+
             // Set status aktif untuk tombol navigasi
             navButtons.forEach(btn => {
-                const iconPageId = btn.id.replace('nav-', 'page-');
+                const btnPageId = 'page-' + btn.id.replace('-btn', '').replace('nav-', '');
                 
                 let isGamePage = (pageId === 'page-game-breathe' || pageId === 'page-game-filter');
                 let isTestPage = (pageId === 'page-result');
 
-                if (iconPageId === pageId || 
-                   (isGamePage && iconPageId === 'page-games') ||
-                   (isTestPage && iconPageId === 'page-test')) 
+                if (btnPageId === pageId || 
+                   (isGamePage && btnPageId === 'page-games') ||
+                   (isTestPage && btnPageId === 'page-test')) 
                 {
-                    btn.classList.remove('text-gray-500', 'hover:bg-gray-100');
-                    btn.classList.add('bg-indigo-100', 'text-indigo-700');
+                    btn.classList.add('active');
+                    btn.classList.remove('text-gray-500');
                 } else {
-                    btn.classList.add('text-gray-500', 'hover:bg-gray-100');
-                    btn.classList.remove('bg-indigo-100', 'text-indigo-700');
+                    btn.classList.remove('active');
+                    btn.classList.add('text-gray-500');
                 }
             });
 
             // Logika spesifik per halaman
             if (pageId === 'page-home') {
                 updateDashboard();
+                startQuoteCarousel(); // Mulai carousel
             }
             if (pageId === 'page-journal') {
                 loadJournalPrompt();
+                renderJournalHistory(); // (BARU) Render histori saat buka jurnal
             }
             if (pageId === 'page-game-breathe') {
                 startBreatheGame();
@@ -712,6 +754,7 @@
                 document.getElementById('test-questions').style.display = 'none';
             }
 
+            // Selalu scroll ke atas saat ganti halaman
             document.getElementById('screen-content').scrollTop = 0;
         }
 
@@ -720,7 +763,7 @@
             document.getElementById('total-points-home').textContent = userPoints;
         }
 
-        // --- LOGIKA JURNAL ---
+        // --- LOGIKA JURNAL & HISTORI (BARU) ---
         const journalPrompts = [
             "Apa satu hal kecil yang kamu syukuri hari ini?",
             "Siapa orang yang membuatmu tersenyum hari ini?",
@@ -734,24 +777,53 @@
             const promptElement = document.getElementById('journal-prompt');
             const randomIndex = Math.floor(Math.random() * journalPrompts.length);
             promptElement.textContent = journalPrompts[randomIndex];
+            currentMood = '😌'; // Reset mood
             // Reset mood selection
             document.querySelectorAll('#mood-selection .mood-btn').forEach(btn => {
-                btn.classList.remove('ring-2');
+                btn.classList.remove('ring-2', 'ring-red-400', 'ring-yellow-400', 'ring-blue-400', 'ring-indigo-400', 'ring-green-400');
+                if(btn.innerText.includes(currentMood)) { // Pilih mood default
+                     btn.classList.add('ring-2', 'ring-blue-400');
+                }
             });
         }
 
         function saveJournal() {
+            const answer = document.getElementById('journal-input').value;
+            const question = document.getElementById('journal-prompt').textContent;
+            if(answer.trim() === "") {
+                showCustomAlert("Jurnal tidak boleh kosong!", "error");
+                return;
+            }
+
+            // Buat entri baru
+            const newEntry = {
+                id: Date.now(),
+                date: new Date().toISOString(),
+                mood: currentMood,
+                question: question,
+                answer: answer
+            };
+            
+            // Tambahkan ke data (di awal array)
+            journalHistoryData.unshift(newEntry);
+
             userStreak++; 
             userPoints += 10; // Tambah poin
             showCustomAlert("Jurnal tersimpan! +10 Poin 🔥", "success");
             
+            // Reset input & render ulang histori
+            loadJournalPrompt();
+            renderJournalHistory();
+            
+            // Pindah ke home setelah 1.5 detik
             setTimeout(() => {
                 showPage('page-home');
-            }, 2000);
+            }, 1500);
         }
 
-         // --- LOGIKA MOOD JURNAL (BARU) ---
+         // --- LOGIKA MOOD JURNAL ---
         function selectMood(mood, element) {
+            currentMood = mood; // Simpan mood
             // Reset semua tombol
             const buttons = document.querySelectorAll('#mood-selection .mood-btn');
             buttons.forEach(btn => {
@@ -761,11 +833,59 @@
             
             // Set tombol yang aktif
             element.classList.add('ring-2');
-            if (mood.includes('Sangat Sedih')) element.classList.add('ring-red-400');
-            else if (mood.includes('Sedih')) element.classList.add('ring-yellow-400');
-            else if (mood.includes('Biasa Saja')) element.classList.add('ring-blue-400');
-            else if (mood.includes('Senang')) element.classList.add('ring-indigo-400');
-            else if (mood.includes('Sangat Senang')) element.classList.add('ring-green-400');
+            if (mood.includes('😭')) element.classList.add('ring-red-400');
+            else if (mood.includes('😟')) element.classList.add('ring-yellow-400');
+            else if (mood.includes('😌')) element.classList.add('ring-blue-400');
+            else if (mood.includes('😊')) element.classList.add('ring-indigo-400');
+            else if (mood.includes('🤩')) element.classList.add('ring-green-400');
+        }
+        
+        // --- RENDER HISTORI JURNAL (BARU) ---
+        function renderJournalHistory() {
+            const listContainer = document.getElementById('journal-history-list');
+            const searchTerm = document.getElementById('journal-search').value.toLowerCase();
+            const sortOrder = document.getElementById('journal-sort').value;
+            
+            listContainer.innerHTML = ''; // Kosongkan list
+
+            // 1. Filter data
+            let filteredData = journalHistoryData.filter(entry => 
+                entry.question.toLowerCase().includes(searchTerm) ||
+                entry.answer.toLowerCase().includes(searchTerm)
+            );
+
+            // 2. Sort data
+            filteredData.sort((a, b) => {
+                if (sortOrder === 'terbaru') {
+                    return new Date(b.date) - new Date(a.date);
+                } else {
+                    return new Date(a.date) - new Date(b.date);
+                }
+            });
+
+            // 3. Render HTML
+            if (filteredData.length === 0) {
+                 listContainer.innerHTML = `<p class="text-gray-500 text-center mt-4">Tidak ada jurnal ditemukan.</p>`;
+                 return;
+            }
+            
+            filteredData.forEach(entry => {
+                const entryDate = new Date(entry.date);
+                const dateString = entryDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+                const timeString = entryDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+                const entryHtml = `
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-2xl">${entry.mood}</span>
+                            <span class="text-sm font-medium text-gray-500">${dateString} - ${timeString}</span>
+                        </div>
+                        <p class="font-semibold text-gray-700 text-sm mb-1">Pertanyaan: ${entry.question}</p>
+                        <p class="text-gray-600 text-sm truncate">${entry.answer}</p>
+                    </div>
+                `;
+                listContainer.innerHTML += entryHtml;
+            });
         }
 
         // --- LOGIKA "VIBE CEPAT" ---
@@ -786,7 +906,6 @@
             if (vibe === 'Marah') element.classList.add('ring-red-500');
         }
 
-
         // --- LOGIKA GAME PERNAPASAN ---
         const breatheText = document.getElementById('breathe-text');
         const breatheSteps = ["Tarik Napas...", "Tahan...", "Hembuskan..."];
@@ -795,7 +914,7 @@
         function startBreatheGame() {
             if (currentBreatheInterval) return; 
             function nextStep() {
-                breatheText.textContent = breatheSteps[currentBreatheStep];
+                if(breatheText) breatheText.textContent = breatheSteps[currentBreatheStep];
                 currentBreatheStep = (currentBreatheStep + 1) % breatheSteps.length;
             }
             nextStep();
@@ -805,7 +924,7 @@
         function stopBreatheGame() {
             clearInterval(currentBreatheInterval);
             currentBreatheInterval = null;
-            breatheText.textContent = "Siap?";
+            if(breatheText) breatheText.textContent = "Siap?";
             currentBreatheStep = 0;
         }
 
@@ -818,14 +937,17 @@
             { text: "Ini terlalu sulit, saya menyerah.", isHelpful: false }
         ];
         let currentThoughtIndex = 0;
-        const thoughtCard = document.getElementById('thought-card');
-        const thoughtText = document.getElementById('thought-text');
-        const filterFeedback = document.getElementById('filter-feedback');
-
+        
         function loadThought() {
+            const thoughtCard = document.querySelector('#page-game-filter #thought-card');
+            const thoughtText = document.querySelector('#page-game-filter #thought-text');
+            const filterFeedback = document.querySelector('#page-game-filter #filter-feedback');
+
             if (currentThoughtIndex >= thoughts.length) {
                 currentThoughtIndex = 0; 
             }
+            if (!thoughtCard) return; // Guard clause
+            
             thoughtCard.style.opacity = '0';
             thoughtCard.style.transform = 'scale(0.9)';
             setTimeout(() => {
@@ -838,6 +960,7 @@
         }
 
         function checkThought(userChoice) {
+            const filterFeedback = document.querySelector('#page-game-filter #filter-feedback');
             const correctChoice = thoughts[currentThoughtIndex].isHelpful;
             if (userChoice === correctChoice) {
                 filterFeedback.textContent = "Tepat Sekali! +5 Poin";
@@ -854,8 +977,8 @@
 
         // --- LOGIKA PROFIL ---
         function updateProfile() {
-            document.getElementById('streak-count').textContent = userStreak;
-            document.getElementById('total-points').textContent = userPoints;
+            document.querySelector('#page-profile #streak-count').textContent = userStreak;
+            document.querySelector('#page-profile #total-points').textContent = userPoints;
         }
         
         // --- LOGIKA TES AWAL (DIRUBAH PER KATEGORI) ---
@@ -891,20 +1014,15 @@
             document.getElementById('test-categories').style.display = 'none'; // Sembunyikan paket
             document.getElementById('test-questions').style.display = 'block'; // Tampilkan pertanyaan
             
-            // Pusatkan container pertanyaan
-            const pageTest = document.getElementById('page-test');
-            pageTest.classList.add('flex', 'flex-col', 'items-center');
-            document.getElementById('test-questions').classList.add('w-full');
-            
             loadTestQuestion();
         }
 
         function loadTestQuestion() {
             const question = currentTestQuestions[currentTestQuestion];
-            document.getElementById('question-progress').textContent = `Pertanyaan ${currentTestQuestion + 1} dari ${currentTestQuestions.length}`;
-            document.getElementById('question-text').textContent = question.q;
+            document.querySelector('#page-test #question-progress').textContent = `Pertanyaan ${currentTestQuestion + 1} dari ${currentTestQuestions.length}`;
+            document.querySelector('#page-test #question-text').textContent = question.q;
 
-            const optionsContainer = document.getElementById('question-options');
+            const optionsContainer = document.querySelector('#page-test #question-options');
             optionsContainer.innerHTML = '';
             testOptions.forEach((option, index) => {
                 optionsContainer.innerHTML += `
@@ -933,10 +1051,6 @@
             document.getElementById('test-questions').style.display = 'none';
             document.getElementById('test-categories').style.display = 'grid';
             
-            // Hapus centering dari Halaman Tes
-             const pageTest = document.getElementById('page-test');
-            pageTest.classList.remove('flex', 'flex-col', 'items-center');
-
             // Pindah ke halaman hasil
             setTimeout(() => {
                 showPage('page-result');
@@ -953,29 +1067,33 @@
             let cemasScore = (testAnswers.cemas / maxCemas) * 100 || 0;
             let depresiScore = (testAnswers.depresi / maxDepresi) * 100 || 0;
 
+            const chartStresContainer = document.querySelector('#page-result #chart-stres-container');
+            const chartCemasContainer = document.querySelector('#page-result #chart-cemas-container');
+            const chartDepresiContainer = document.querySelector('#page-result #chart-depresi-container');
+
             // Jika belum tes (skor 0 semua), beri nilai default
             if (stresScore === 0 && cemasScore === 0 && depresiScore === 0) {
                 stresScore = 70; cemasScore = 40; depresiScore = 25; // Default lama
-                document.getElementById('chart-stres-container').style.display = 'block';
-                document.getElementById('chart-cemas-container').style.display = 'block';
-                document.getElementById('chart-depresi-container').style.display = 'block';
+                chartStresContainer.style.display = 'block';
+                chartCemasContainer.style.display = 'block';
+                chartDepresiContainer.style.display = 'block';
             } else {
                 // Sembunyikan bar yang tidak relevan (skor 0)
-                document.getElementById('chart-stres-container').style.display = stresScore > 0 ? 'block' : 'none';
-                document.getElementById('chart-cemas-container').style.display = cemasScore > 0 ? 'block' : 'none';
-                document.getElementById('chart-depresi-container').style.display = depresiScore > 0 ? 'block' : 'none';
+                chartStresContainer.style.display = stresScore > 0 ? 'block' : 'none';
+                chartCemasContainer.style.display = cemasScore > 0 ? 'block' : 'none';
+                chartDepresiContainer.style.display = depresiScore > 0 ? 'block' : 'none';
             }
             
             // Set width ke 0 dulu untuk memicu transisi
-            document.getElementById('chart-stres').style.width = `0%`;
-            document.getElementById('chart-cemas').style.width = `0%`;
-            document.getElementById('chart-depresi').style.width = `0%`;
+            document.querySelector('#page-result #chart-stres').style.width = `0%`;
+            document.querySelector('#page-result #chart-cemas').style.width = `0%`;
+            document.querySelector('#page-result #chart-depresi').style.width = `0%`;
 
             // Set width baru setelah delay singkat
             setTimeout(() => {
-                document.getElementById('chart-stres').style.width = `${stresScore}%`;
-                document.getElementById('chart-cemas').style.width = `${cemasScore}%`;
-                document.getElementById('chart-depresi').style.width = `${depresiScore}%`;
+                document.querySelector('#page-result #chart-stres').style.width = `${stresScore}%`;
+                document.querySelector('#page-result #chart-cemas').style.width = `${cemasScore}%`;
+                document.querySelector('#page-result #chart-depresi').style.width = `${depresiScore}%`;
             }, 100);
         }
         
@@ -1059,10 +1177,87 @@
             alertBox.classList.add('opacity-100', 'translate-y-0', 'scale-100');
 
             setTimeout(() => {
-                alertBox.classList.add('opacity-0', '-translate-y-10', 'scale-95');
+                alertBox.classList.add('opacity-0', '-translate-Y-10', 'scale-95');
                 alertBox.classList.remove('opacity-100', 'translate-y-0', 'scale-100');
             }, 3000);
         }
+
+         // --- LOGIKA QUOTE CAROUSEL (DIKEMBALIKAN & DIPERBAIKI) ---
+        const quotes = [
+            { text: "Kesehatan mental... bukanlah tujuan, tapi sebuah proses. Ini tentang bagaimana kamu berkendara, bukan ke mana kamu pergi.", author: "Noam Shpancer" },
+            { text: "Kamu tidak harus mengendalikan pikiranmu. Kamu hanya harus berhenti membiarkan mereka mengendalikanmu.", author: "Dan Millman" },
+            { text: "Perawatan diri adalah bagaimana kamu mengambil kembali kekuatanmu.", author: "Lalah Delia" },
+            { text: "Tidak apa-apa untuk tidak baik-baik saja.", author: "Anonim" }
+        ];
+
+        function stopQuoteCarousel() {
+            clearInterval(quoteInterval);
+            quoteInterval = null;
+        }
+
+        function startQuoteCarousel() {
+            if (quoteInterval) return; // Mencegah interval ganda
+
+            const track = document.getElementById('quote-track');
+            const dotsContainer = document.getElementById('quote-dots');
+            if (!track || !dotsContainer) return; // Pastikan elemen ada
+            track.innerHTML = '';
+            dotsContainer.innerHTML = '';
+
+            // Buat slides dan dots
+            quotes.forEach((quote, index) => {
+                // Buat slide (FIXED: tambahkan w-full dan flex-shrink-0)
+                const slide = document.createElement('div');
+                slide.className = "quote-slide w-full flex-shrink-0 p-6 flex flex-col justify-center items-center text-center absolute top-0 left-0 h-full opacity-0 transition-opacity duration-700";
+                slide.innerHTML = `
+                    <p class="text-lg font-medium text-gray-700">"${quote.text}"</p>
+                    <p class="text-sm font-semibold text-indigo-500 mt-3">- ${quote.author}</p>
+                `;
+                track.appendChild(slide);
+
+                // Buat dot
+                const dot = document.createElement('button');
+                dot.className = "h-2 w-2 rounded-full bg-gray-300 transition-all";
+                dot.onclick = () => {
+                    currentQuoteIndex = index;
+                    updateCarousel();
+                };
+                dotsContainer.appendChild(dot);
+            });
+
+            // Fungsi untuk update tampilan carousel
+            function updateCarousel() {
+                const allSlides = track.querySelectorAll('.quote-slide');
+                const allDots = dotsContainer.querySelectorAll('button');
+
+                allSlides.forEach((slide, index) => {
+                    if (index === currentQuoteIndex) {
+                        slide.style.opacity = '1';
+                    } else {
+                        slide.style.opacity = '0';
+                    }
+                });
+
+                allDots.forEach((dot, index) => {
+                    if (index === currentQuoteIndex) {
+                        dot.classList.remove('bg-gray-300');
+                        dot.classList.add('bg-indigo-600');
+                    } else {
+                        dot.classList.add('bg-gray-300');
+                        dot.classList.remove('bg-indigo-600');
+                    }
+                });
+            }
+
+            // Mulai interval
+            quoteInterval = setInterval(() => {
+                currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+                updateCarousel();
+            }, 5000); // Ganti setiap 5 detik
+
+            updateCarousel(); // Tampilkan slide pertama
+        }
+
 
         // Inisialisasi: Tampilkan halaman home saat pertama kali dimuat
         document.addEventListener('DOMContentLoaded', () => {
