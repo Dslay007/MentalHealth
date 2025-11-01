@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SoulCare - Web Dashboard</title>
     <!-- Memuat Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -92,7 +92,7 @@
             <!-- Tombol Tes Awal -->
             <button id="nav-test" onclick="showPage('page-test')" class="nav-btn text-gray-500 hover:bg-gray-100 p-4 rounded-lg active:scale-95 w-full flex items-center space-x-3 transition-all hover:scale-105">
                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
-                <span class="text-base font-semibold">Tes Awal</span>
+                <span class="text-base font-semibold">Pusat Tes</span>
             </button>
             <!-- Tombol Jurnal -->
             <button id="nav-journal" onclick="showPage('page-journal')" class="nav-btn text-gray-500 hover:bg-gray-100 p-4 rounded-lg active:scale-95 w-full flex items-center space-x-3 transition-all hover:scale-105">
@@ -177,14 +177,19 @@
                 <!-- Kolom Kanan (Aktivitas) -->
                 <div class="lg:col-span-2 space-y-6">
                     
-                    <!-- Quote Carousel (BARU) -->
-                    <div id="quote-carousel-container" class="relative bg-white p-6 rounded-2xl shadow-lg overflow-hidden h-40">
-                        <div id="quote-track" class="absolute top-0 left-0 h-full flex transition-transform duration-700 ease-in-out">
-                            <!-- Kutipan akan di-generate oleh JS -->
+                    <!-- Insight dari Soul-AI (BARU, Sesuai Gambar) -->
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-2xl shadow-lg flex items-center space-x-5 card-hover relative overflow-hidden">
+                        <div class="flex-shrink-0 z-10">
+                            <!-- Icon AI (mirip gambar) -->
+                            <div class="p-3 bg-white/20 rounded-xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path><path d="M12 12a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"></path><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path></svg>
+                            </div>
                         </div>
-                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2" id="quote-dots">
-                            <!-- Dots akan di-generate oleh JS -->
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-xl">Insight dari Soul-AI</h3>
+                            <p class="mt-1 text-sm opacity-90">Pola jurnalmu 3 hari ini menunjukkan kamu sedang fokus pada target. Hebat! Tapi, jangan lupa istirahat. Coba main "Tarik Napas" 5 menit hari ini.</p>
                         </div>
+                        <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full opacity-50 z-0"></div>
                     </div>
 
                     <!-- Hasil Tes Terakhir -->
@@ -467,54 +472,54 @@
         <div id="page-test" class="page" style="display: none;">
              <!-- Header Halaman -->
             <div>
-                <h1 class="text-4xl font-bold text-gray-900">Paket Tes Kesehatan Mental</h1>
-                <p class="text-lg text-gray-500 mt-1">Pilih paket tes yang sesuai dengan kebutuhanmu saat ini.</p>
+                <h1 class="text-4xl font-bold text-gray-900">Pusat Tes Kesehatan Mental</h1>
+                <p class="text-lg text-gray-500 mt-1">Pilih tes berdasarkan apa yang ingin kamu ketahui saat ini.</p>
             </div>
 
-            <!-- Pilihan Paket Tes (BARU) -->
-            <div id="test-packages" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Pilihan Paket Tes (DIROMBAK per Kategori) -->
+            <div id="test-categories" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
-                <!-- Paket 1: Starter -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-green-400 flex flex-col">
-                    <div class="p-4 bg-gradient-to-br from-green-400 to-green-600 rounded-xl w-min mb-4 shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                    </div>
-                    <h3 class="text-2xl font-semibold text-gray-900">Starter Tes</h3>
-                    <p class="text-gray-600 mt-2 flex-1">Cek cepat 5 pertanyaan untuk refleksi harian. <strong class="font-semibold text-indigo-700">Bukan diagnosis medis</strong>.</p>
-                    <div class="mt-6">
-                        <span class="inline-block bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full mb-4">+20 Poin</span>
-                        <button onclick="startTest()" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
-                            Mulai Tes (5 Mnt)
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Paket 2: Medium (Terkunci) -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-yellow-400 flex flex-col opacity-70">
-                    <div class="p-4 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl w-min mb-4 shadow-lg">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    </div>
-                    <h3 class="text-2xl font-semibold text-gray-900">Tes Medium</h3>
-                    <p class="text-gray-600 mt-2 flex-1">Refleksi mendalam (15 pertanyaan) untuk melihat pola stres & kecemasan.</p>
-                    <div class="mt-6">
-                        <span class="inline-block bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full mb-4">+50 Poin</span>
-                        <button class="w-full bg-gray-400 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg cursor-not-allowed">
-                            Terkunci
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Paket 3: Hard (Terkunci) -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-red-400 flex flex-col opacity-70">
+                <!-- Kategori 1: Tes Stres -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-red-400 flex flex-col">
                     <div class="p-4 bg-gradient-to-br from-red-400 to-red-600 rounded-xl w-min mb-4 shadow-lg">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="4" y2="8"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="20" y1="20" x2="20" y2="12"></line></svg>
                     </div>
-                    <h3 class="text-2xl font-semibold text-gray-900">Tes Komprehensif</h3>
-                    <p class="text-gray-600 mt-2 flex-1">Analisis lengkap (30 pertanyaan) mencakup berbagai aspek kesehatan mental.</p>
+                    <h3 class="text-2xl font-semibold text-gray-900">Tes Stres</h3>
+                    <p class="text-gray-600 mt-2 flex-1">Merasa tertekan atau kewalahan akhir-akhir ini? Cek level stresmu di sini (5 pertanyaan).</p>
                     <div class="mt-6">
-                        <span class="inline-block bg-red-100 text-red-800 text-sm font-medium px-3 py-1 rounded-full mb-4">+100 Poin</span>
-                        <button class="w-full bg-gray-400 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg cursor-not-allowed">
-                            Terkunci
+                        <span class="inline-block bg-red-100 text-red-800 text-sm font-medium px-3 py-1 rounded-full mb-4">+20 Poin</span>
+                        <button onclick="startTest('stres')" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                            Mulai Tes
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kategori 2: Tes Kecemasan -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-yellow-400 flex flex-col">
+                    <div class="p-4 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl w-min mb-4 shadow-lg">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-900">Tes Kecemasan</h3>
+                    <p class="text-gray-600 mt-2 flex-1">Sering merasa cemas, khawatir, atau panik? Tes ini (5 pertanyaan) bisa membantumu.</p>
+                    <div class="mt-6">
+                        <span class="inline-block bg-yellow-100 text-yellow-800 text-sm font-medium px-3 py-1 rounded-full mb-4">+20 Poin</span>
+                        <button onclick="startTest('cemas')" class="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                            Mulai Tes
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kategori 3: Tes Mood/Depresi -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-blue-400 flex flex-col">
+                    <div class="p-4 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl w-min mb-4 shadow-lg">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-900">Tes Mood (Depresi)</h3>
+                    <p class="text-gray-600 mt-2 flex-1">Merasa sedih atau kehilangan minat belakangan ini? Cek mood-mu di sini (5 pertanyaan).</p>
+                    <div class="mt-6">
+                        <span class="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full mb-4">+20 Poin</span>
+                        <button onclick="startTest('depresi')" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                            Mulai Tes
                         </button>
                     </div>
                 </div>
@@ -536,7 +541,7 @@
          <div id="page-result" class="page" style="display: none;">
              <!-- Header Halaman -->
             <div>
-                <h1 class="text-4xl font-bold text-gray-900">Hasil Tes Awal Anda</h1>
+                <h1 class="text-4xl font-bold text-gray-900">Hasil Tes Anda</h1>
                 <p class="text-lg text-gray-500 mt-1">Berikut adalah ringkasan kondisimu selama seminggu terakhir.</p>
             </div>
 
@@ -546,7 +551,7 @@
                     <h3 class="text-2xl font-semibold text-gray-900 mb-8">Grafik Visual Kondisi</h3>
                     <div class="space-y-6">
                         <!-- Bar Stres -->
-                        <div>
+                        <div id="chart-stres-container">
                             <span class="text-lg font-semibold text-red-700">Stres</span>
                             <div class="flex-1 bg-gray-200 rounded-full h-6 mt-2 shadow-inner">
                                 <div id="chart-stres" class="chart-bar bg-gradient-to-r from-red-400 to-red-600 h-6 rounded-full flex items-center justify-end pr-3">
@@ -555,7 +560,7 @@
                             </div>
                         </div>
                         <!-- Bar Kecemasan -->
-                        <div>
+                        <div id="chart-cemas-container">
                             <span class="text-lg font-semibold text-yellow-700">Kecemasan</span>
                             <div class="flex-1 bg-gray-200 rounded-full h-6 mt-2 shadow-inner">
                                 <div id="chart-cemas" class="chart-bar bg-gradient-to-r from-yellow-400 to-yellow-600 h-6 rounded-full flex items-center justify-end pr-3">
@@ -564,7 +569,7 @@
                             </div>
                         </div>
                         <!-- Bar Depresi -->
-                        <div>
+                        <div id="chart-depresi-container">
                             <span class="text-lg font-semibold text-blue-700">Depresi</span>
                             <div class="flex-1 bg-gray-200 rounded-full h-6 mt-2 shadow-inner">
                                 <div id="chart-depresi" class="chart-bar bg-gradient-to-r from-blue-400 to-blue-600 h-6 rounded-full flex items-center justify-end pr-3">
@@ -585,7 +590,7 @@
                             <li><strong>Jurnal Harian</strong> untuk mencatat apa yang membuatmu stres.</li>
                             <li>Bicara dengan <strong>Soul-AI Chat</strong> untuk refleksi cepat.</li>
                         </ul>
-                        <p class="mt-4">Ingat, ini bukan diagnosis. Jika merasa sangat terganggu, jangan ragu hubungi profesional.</p>
+                        <p class="mt-4"><strong class="font-semibold">Ingat, ini bukan diagnosis.</strong> Jika merasa sangat terganggu, jangan ragu hubungi profesional.</p>
                     </div>
                     <button onclick="showPage('page-games')" class="mt-6 w-full bg-white text-indigo-700 font-semibold py-3 px-5 text-base rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
                         Coba Mini-Game Sekarang
@@ -649,12 +654,11 @@
         const pages = document.querySelectorAll('.page');
         const navButtons = document.querySelectorAll('.nav-btn');
         let currentBreatheInterval = null;
-        let quoteInterval = null; // Untuk quote carousel
-        let currentQuoteIndex = 0;
         let userStreak = 5; 
         let userPoints = 120; // Poin gamifikasi
         let currentTestQuestion = 0;
         let testAnswers = {}; // Menyimpan jawaban tes
+        let currentTestQuestions = []; // Akan diisi oleh startTest
 
         function showPage(pageId) {
             pages.forEach(page => { page.style.display = 'none'; });
@@ -663,8 +667,7 @@
 
             // Hentikan interval spesifik halaman
             stopBreatheGame();
-            stopQuoteCarousel();
-
+            
             // Set status aktif untuk tombol navigasi
             navButtons.forEach(btn => {
                 const iconPageId = btn.id.replace('nav-', 'page-');
@@ -687,7 +690,6 @@
             // Logika spesifik per halaman
             if (pageId === 'page-home') {
                 updateDashboard();
-                startQuoteCarousel(); // Mulai carousel
             }
             if (pageId === 'page-journal') {
                 loadJournalPrompt();
@@ -706,7 +708,7 @@
             }
              if (pageId === 'page-test') {
                 // Tampilkan pilihan paket, sembunyikan pertanyaan
-                document.getElementById('test-packages').style.display = 'grid';
+                document.getElementById('test-categories').style.display = 'grid';
                 document.getElementById('test-questions').style.display = 'none';
             }
 
@@ -856,27 +858,50 @@
             document.getElementById('total-points').textContent = userPoints;
         }
         
-        // --- LOGIKA TES AWAL ---
-        const testQuestions = [
-            { q: "Saya merasa sulit untuk tenang dan rileks.", category: 'stres' },
-            { q: "Saya merasa cemas berlebihan tentang banyak hal.", category: 'cemas' },
-            { q: "Saya merasa sedih dan murung hampir sepanjang waktu.", category: 'depresi' },
-            { q: "Saya mudah marah atau tersinggung.", category: 'stres' },
-            { q: "Saya merasa panik atau takut secara tiba-tiba.", category: 'cemas' },
-        ];
+        // --- LOGIKA TES AWAL (DIRUBAH PER KATEGORI) ---
+        const allTestQuestions = {
+            stres: [
+                { q: "Saya merasa sulit untuk tenang dan rileks.", category: 'stres' },
+                { q: "Saya mudah marah atau tersinggung.", category: 'stres' },
+                { q: "Saya merasa terlalu terbebani oleh pekerjaan atau tugas.", category: 'stres' },
+                { q: "Saya merasa tegang atau gelisah.", category: 'stres' },
+                { q: "Saya sulit berkonsentrasi karena terlalu banyak pikiran.", category: 'stres' }
+            ],
+            cemas: [
+                { q: "Saya merasa cemas berlebihan tentang banyak hal.", category: 'cemas' },
+                { q: "Saya merasa panik atau takut secara tiba-tiba.", category: 'cemas' },
+                { q: "Saya tidak bisa berhenti khawatir.", category: 'cemas' },
+                { q: "Saya merasa gelisah dan tidak bisa diam.", category: 'cemas' },
+                { q: "Saya takut hal buruk akan terjadi.", category: 'cemas' }
+            ],
+            depresi: [
+                { q: "Saya merasa sedih dan murung hampir sepanjang waktu.", category: 'depresi' },
+                { q: "Saya kehilangan minat pada hal-hal yang biasanya saya nikmati.", category: 'depresi' },
+                { q: "Saya merasa lelah tanpa alasan yang jelas.", category: 'depresi' },
+                { q: "Saya merasa tidak berharga atau bersalah.", category: 'depresi' },
+                { q: "Saya kesulitan tidur atau tidur terlalu banyak.", category: 'depresi' }
+            ]
+        };
         const testOptions = ["Tidak Pernah", "Jarang", "Sering", "Hampir Selalu"];
 
-        function startTest() {
+        function startTest(testType) { // 'stres', 'cemas', or 'depresi'
+            currentTestQuestions = allTestQuestions[testType]; // Pilih set pertanyaan
             currentTestQuestion = 0;
-            testAnswers = { stres: 0, cemas: 0, depresi: 0 };
-            document.getElementById('test-packages').style.display = 'none'; // Sembunyikan paket
+            testAnswers = { stres: 0, cemas: 0, depresi: 0 }; // Reset skor
+            document.getElementById('test-categories').style.display = 'none'; // Sembunyikan paket
             document.getElementById('test-questions').style.display = 'block'; // Tampilkan pertanyaan
+            
+            // Pusatkan container pertanyaan
+            const pageTest = document.getElementById('page-test');
+            pageTest.classList.add('flex', 'flex-col', 'items-center');
+            document.getElementById('test-questions').classList.add('w-full');
+            
             loadTestQuestion();
         }
 
         function loadTestQuestion() {
-            const question = testQuestions[currentTestQuestion];
-            document.getElementById('question-progress').textContent = `Pertanyaan ${currentTestQuestion + 1} dari ${testQuestions.length}`;
+            const question = currentTestQuestions[currentTestQuestion];
+            document.getElementById('question-progress').textContent = `Pertanyaan ${currentTestQuestion + 1} dari ${currentTestQuestions.length}`;
             document.getElementById('question-text').textContent = question.q;
 
             const optionsContainer = document.getElementById('question-options');
@@ -893,7 +918,7 @@
         function answerQuestion(score, category) {
             testAnswers[category] += score; // Tambah skor berdasarkan kategori
             currentTestQuestion++;
-            if (currentTestQuestion < testQuestions.length) {
+            if (currentTestQuestion < currentTestQuestions.length) {
                 loadTestQuestion();
             } else {
                 finishTest();
@@ -903,9 +928,15 @@
         function finishTest() {
             userPoints += 20; // Poin karena menyelesaikan tes
             showCustomAlert("Tes Selesai! +20 Poin 🧠", "success");
+            
             // Sembunyikan pertanyaan, tampilkan lagi paket tes
             document.getElementById('test-questions').style.display = 'none';
-            document.getElementById('test-packages').style.display = 'grid';
+            document.getElementById('test-categories').style.display = 'grid';
+            
+            // Hapus centering dari Halaman Tes
+             const pageTest = document.getElementById('page-test');
+            pageTest.classList.remove('flex', 'flex-col', 'items-center');
+
             // Pindah ke halaman hasil
             setTimeout(() => {
                 showPage('page-result');
@@ -914,15 +945,25 @@
 
         // --- LOGIKA HASIL TES ---
         function animateChart() {
-            // Nilai dummy berdasarkan jawaban (0-3 per q)
-            // Stres (2q): max 6. Cemas (2q): max 6. Depresi (1q): max 3.
-            let stresScore = (testAnswers.stres / 6) * 100; // persentase
-            let cemasScore = (testAnswers.cemas / 6) * 100;
-            let depresiScore = (testAnswers.depresi / 3) * 100;
+            const maxStres = (allTestQuestions.stres.length * 3);
+            const maxCemas = (allTestQuestions.cemas.length * 3);
+            const maxDepresi = (allTestQuestions.depresi.length * 3);
+            
+            let stresScore = (testAnswers.stres / maxStres) * 100 || 0;
+            let cemasScore = (testAnswers.cemas / maxCemas) * 100 || 0;
+            let depresiScore = (testAnswers.depresi / maxDepresi) * 100 || 0;
 
-            // Jika belum tes, beri nilai default
+            // Jika belum tes (skor 0 semua), beri nilai default
             if (stresScore === 0 && cemasScore === 0 && depresiScore === 0) {
-                stresScore = 70; cemasScore = 40; depresiScore = 25;
+                stresScore = 70; cemasScore = 40; depresiScore = 25; // Default lama
+                document.getElementById('chart-stres-container').style.display = 'block';
+                document.getElementById('chart-cemas-container').style.display = 'block';
+                document.getElementById('chart-depresi-container').style.display = 'block';
+            } else {
+                // Sembunyikan bar yang tidak relevan (skor 0)
+                document.getElementById('chart-stres-container').style.display = stresScore > 0 ? 'block' : 'none';
+                document.getElementById('chart-cemas-container').style.display = cemasScore > 0 ? 'block' : 'none';
+                document.getElementById('chart-depresi-container').style.display = depresiScore > 0 ? 'block' : 'none';
             }
             
             // Set width ke 0 dulu untuk memicu transisi
@@ -1022,83 +1063,6 @@
                 alertBox.classList.remove('opacity-100', 'translate-y-0', 'scale-100');
             }, 3000);
         }
-
-         // --- LOGIKA QUOTE CAROUSEL (BARU) ---
-        const quotes = [
-            { text: "Kesehatan mental... bukanlah tujuan, tapi sebuah proses. Ini tentang bagaimana kamu berkendara, bukan ke mana kamu pergi.", author: "Noam Shpancer" },
-            { text: "Kamu tidak harus mengendalikan pikiranmu. Kamu hanya harus berhenti membiarkan mereka mengendalikanmu.", author: "Dan Millman" },
-            { text: "Perawatan diri adalah bagaimana kamu mengambil kembali kekuatanmu.", author: "Lalah Delia" },
-            { text: "Tidak apa-apa untuk tidak baik-baik saja.", author: "Anonim" }
-        ];
-
-        function stopQuoteCarousel() {
-            clearInterval(quoteInterval);
-            quoteInterval = null;
-        }
-
-        function startQuoteCarousel() {
-            if (quoteInterval) return; // Mencegah interval ganda
-
-            const track = document.getElementById('quote-track');
-            const dotsContainer = document.getElementById('quote-dots');
-            track.innerHTML = '';
-            dotsContainer.innerHTML = '';
-
-            // Buat slides dan dots
-            quotes.forEach((quote, index) => {
-                // Buat slide
-                const slide = document.createElement('div');
-                slide.className = "w-full flex-shrink-0 p-6 flex flex-col justify-center items-center text-center absolute top-0 left-0 h-full opacity-0 transition-opacity duration-700";
-                slide.style.width = '100%'; // Pastikan lebar slide sesuai
-                slide.innerHTML = `
-                    <p class="text-lg font-medium text-gray-700">"${quote.text}"</p>
-                    <p class="text-sm font-semibold text-indigo-500 mt-3">- ${quote.author}</p>
-                `;
-                track.appendChild(slide);
-
-                // Buat dot
-                const dot = document.createElement('button');
-                dot.className = "h-2 w-2 rounded-full bg-gray-300 transition-all";
-                dot.onclick = () => {
-                    currentQuoteIndex = index;
-                    updateCarousel();
-                };
-                dotsContainer.appendChild(dot);
-            });
-
-            // Fungsi untuk update tampilan carousel
-            function updateCarousel() {
-                const allSlides = track.querySelectorAll('div');
-                const allDots = dotsContainer.querySelectorAll('button');
-
-                allSlides.forEach((slide, index) => {
-                    if (index === currentQuoteIndex) {
-                        slide.style.opacity = '1';
-                    } else {
-                        slide.style.opacity = '0';
-                    }
-                });
-
-                allDots.forEach((dot, index) => {
-                    if (index === currentQuoteIndex) {
-                        dot.classList.remove('bg-gray-300');
-                        dot.classList.add('bg-indigo-600');
-                    } else {
-                        dot.classList.add('bg-gray-300');
-                        dot.classList.remove('bg-indigo-600');
-                    }
-                });
-            }
-
-            // Mulai interval
-            quoteInterval = setInterval(() => {
-                currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
-                updateCarousel();
-            }, 5000); // Ganti setiap 5 detik
-
-            updateCarousel(); // Tampilkan slide pertama
-        }
-
 
         // Inisialisasi: Tampilkan halaman home saat pertama kali dimuat
         document.addEventListener('DOMContentLoaded', () => {
