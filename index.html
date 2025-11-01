@@ -411,7 +411,7 @@
             </div>
         </div>
 
-        <!-- Halaman 6: Profil (Mock) -->
+        <!-- Halaman 6: Profil (Mock) (FIXED) -->
         <div id="page-profile" class="page p-12 space-y-8 hidden">
              <!-- Header Halaman -->
             <div>
@@ -438,14 +438,132 @@
                         <span id="total-points" class="text-5xl font-bold text-indigo-600 mt-3 block">120</span>
                     </div>
                 </div>
-                <!-- Kolom Kanan: Pencapaian -->
+                <!-- Kolom Kanan: Pencapaian (FIXED) -->
                 <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg">
                      <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Lencana Pencapaian</h3>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
                         <!-- Badges ... -->
                         <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow">
                             <span class="text-6xl">🧘</span>
-                            <p class-><strong class="font-bold">Stres yang cukup tinggi</strong>. Ini wajar dirasakan saat banyak tekanan.</p>
+                            <p class="text-md font-semibold text-gray-700 mt-2">Pikiran Tenang</p>
+                        </div>
+                        <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow">
+                            <span class="text-6xl">✍️</span>
+                            <p class="text-md font-semibold text-gray-700 mt-2">Penulis Jurnal</p>
+                        </div>
+                        <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow">
+                            <span class="text-6xl">🧠</span>
+                            <p class="text-md font-semibold text-gray-700 mt-2">Penyaring Pikiran</p>
+                        </div>
+                        <div class="text-center p-4 bg-gray-100 rounded-lg opacity-40 transition-all hover:scale-105 shadow">
+                            <span class="text-6xl">💪</span>
+                            <p class="text-md font-semibold text-gray-700 mt-2">Mental Kuat</p>
+                        </div>
+                        <!-- KODE RUSAK YANG DIHAPUS ADA DI SINI -->
+                    </div>
+                </div>
+            </div>
+         </div>
+
+        <!-- Halaman 7: Tes Awal (DIROMBAK) -->
+        <div id="page-test" class="page p-12 hidden">
+             <!-- Header Halaman -->
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900">Pusat Tes Kesehatan Mental</h1>
+                <p class="text-lg text-gray-500 mt-1">Pilih tes berdasarkan apa yang ingin kamu ketahui saat ini.</p>
+            </div>
+            <!-- Pilihan Kategori Tes -->
+            <div id="test-categories" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Kategori 1: Tes Stres -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-red-400 flex flex-col">
+                    <div class="p-4 bg-gradient-to-br from-red-400 to-red-600 rounded-xl w-min mb-4 shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="4" y2="8"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="20" y1="20" x2="20" y2="12"></line></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-900">Tes Stres</h3>
+                    <p class="text-gray-600 mt-2 flex-1">Merasa tertekan? Cek level stresmu (5 pertanyaan).</p>
+                    <button onclick="startTest('stres')" class="mt-4 w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                        Mulai Tes
+                    </button>
+                </div>
+                <!-- Kategori 2: Tes Kecemasan -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-yellow-400 flex flex-col">
+                    <div class="p-4 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl w-min mb-4 shadow-lg">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-900">Tes Kecemasan</h3>
+                    <p class="text-gray-600 mt-2 flex-1">Sering cemas atau panik? Tes ini (5 pertanyaan) bisa membantu.</p>
+                    <button onclick="startTest('cemas')" class="mt-4 w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                        Mulai Tes
+                    </button>
+                </div>
+                <!-- Kategori 3: Tes Mood/Depresi -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-blue-400 flex flex-col">
+                    <div class="p-4 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl w-min mb-4 shadow-lg">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-900">Tes Mood (Depresi)</h3>
+                    <p class="text-gray-600 mt-2 flex-1">Merasa sedih belakangan ini? Cek mood-mu (5 pertanyaan).</p>
+                    <button onclick="startTest('depresi')" class="mt-4 w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                        Mulai Tes
+                    </button>
+                </div>
+            </div>
+            <!-- Pertanyaan Kuis (disembunyikan) -->
+            <div id="test-questions" class="mt-6 bg-white p-8 rounded-2xl shadow-lg max-w-2xl w-full mx-auto" style="display: none;">
+                <p class="text-sm font-medium text-indigo-600 text-center" id="question-progress">Pertanyaan 1 dari 5</p>
+                <h3 class="text-2xl font-semibold text-gray-900 mt-2 text-center" id="question-text">Saya merasa sulit untuk tenang dan rileks.</h3>
+                <div class="space-y-3 mt-6 w-full mx-auto" id="question-options">
+                    <!-- Opsi akan di-generate oleh JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman 8: Hasil Tes -->
+         <div id="page-result" class="page p-12 hidden">
+             <!-- Header Halaman -->
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900">Hasil Tes Anda</h1>
+                <p class="text-lg text-gray-500 mt-1">Berikut adalah ringkasan kondisimu selama seminggu terakhir.</p>
+            </div>
+            <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Kolom Kiri: Grafik -->
+                <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-8">Grafik Visual Kondisi</h3>
+                    <div class="space-y-6">
+                        <!-- Bar Stres -->
+                        <div id="chart-stres-container">
+                            <span class="text-lg font-semibold text-red-700">Stres</span>
+                            <div class="flex-1 bg-gray-200 rounded-full h-6 mt-2 shadow-inner">
+                                <div id="chart-stres" class="chart-bar bg-gradient-to-r from-red-400 to-red-600 h-6 rounded-full flex items-center justify-end pr-3">
+                                    <span class="text-sm font-bold text-white">Tinggi</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bar Kecemasan -->
+                        <div id="chart-cemas-container">
+                            <span class="text-lg font-semibold text-yellow-700">Kecemasan</span>
+                            <div class="flex-1 bg-gray-200 rounded-full h-6 mt-2 shadow-inner">
+                                <div id="chart-cemas" class="chart-bar bg-gradient-to-r from-yellow-400 to-yellow-600 h-6 rounded-full flex items-center justify-end pr-3">
+                                    <span class="text-sm font-bold text-white">Sedang</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bar Depresi -->
+                        <div id="chart-depresi-container">
+                            <span class="text-lg font-semibold text-blue-700">Depresi</span>
+                            <div class="flex-1 bg-gray-200 rounded-full h-6 mt-2 shadow-inner">
+                                <div id="chart-depresi" class="chart-bar bg-gradient-to-r from-blue-400 to-blue-600 h-6 rounded-full flex items-center justify-end pr-3">
+                                    <span class="text-sm font-bold text-white">Rendah</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Kolom Kanan: Rekomendasi AI -->
+                <div class="lg:col-span-1 bg-gradient-to-br from-indigo-500 to-purple-600 text-white p-8 rounded-2xl shadow-2xl">
+                    <h3 class="font-bold text-2xl mb-4">Rekomendasi Soul-AI</h3>
+                    <div class="space-y-4 text-base opacity-90">
+                        <p>Hasil tes menunjukkan level <strong class="font-bold">Stres yang cukup tinggi</strong>. Ini wajar dirasakan saat banyak tekanan.</p>
                         <p>Kami merekomendasikanmu untuk mencoba:</p>
                         <ul class="list-disc list-inside space-y-2">
                             <li><strong>Mini-Game "Tarik Napas"</strong> 2x sehari.</li>
@@ -1164,5 +1282,4 @@
 
 </body>
 </html>
-"
 
