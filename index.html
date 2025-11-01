@@ -147,14 +147,42 @@
              transition: transform 0.7s ease-in-out;
         }
         
-        /* Puzzle Game (BARU) */
+        /* Puzzle Game (Memory Card) (BARU) */
         .puzzle-tile {
             transition: all 0.3s ease;
-            background-color: #c7d2fe; /* indigo-200 */
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
-        .puzzle-tile.flipped {
-            opacity: 0;
-            transform: scale(0.9);
+        .puzzle-tile.flipped .puzzle-front {
+            transform: rotateY(180deg);
+        }
+        .puzzle-tile.flipped .puzzle-back {
+            transform: rotateY(0deg);
+        }
+        .puzzle-tile .puzzle-front, .puzzle-tile .puzzle-back {
+            backface-visibility: hidden;
+            transition: transform 0.3s ease;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem; /* rounded-lg */
+        }
+        .puzzle-tile .puzzle-front {
+            background-color: #c7d2fe; /* indigo-200 */
+            transform: rotateY(0deg);
+        }
+        .puzzle-tile .puzzle-back {
+            background-color: #ffffff; /* white */
+            border: 2px solid #a5b4fc; /* indigo-300 */
+            transform: rotateY(-180deg);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .puzzle-tile.matched {
+            opacity: 0.5;
             pointer-events: none;
         }
         #puzzle-reward {
@@ -237,17 +265,17 @@
                         </div>
                     </div>
                     
-                    <!-- Tantangan Harian (BARU) -->
+                    <!-- Tantangan Harian (FIXED) -->
                     <div class="bg-cyan-50 p-6 rounded-2xl shadow-lg card-hover relative">
                         <div class="relative z-10">
                             <h3 class="text-xl font-semibold text-gray-800 mb-4">Tantangan Harian</h3>
                             <div class="flex items-center space-x-4">
-                                <span class="text-4xl p-3 bg-cyan-200 text-cyan-700 rounded-lg">🎯</span>
-                                <div>
-                                    <p class="font-semibold text-gray-700">Tulis 3 Hal yang Kamu Syukuri</p>
-                                    <p class="text-sm text-gray-500">Latih rasa syukurmu hari ini di Jurnal Harian.</p>
+                                <span class="text-4xl p-3 bg-cyan-200 text-cyan-700 rounded-lg flex-shrink-0">🎯</span>
+                                <div class="flex-1 min-w-0"> <!-- (FIXED) Tambah flex-1 min-w-0 -->
+                                    <p class="font-semibold text-gray-700 truncate">Tulis 3 Hal yang Kamu Syukuri</p>
+                                    <p class="text-sm text-gray-500 truncate">Latih rasa syukurmu hari ini di Jurnal Harian.</p>
                                 </div>
-                                <button onclick="showPage('page-journal')" class="ml-auto bg-cyan-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-cyan-700 transition-all text-sm">
+                                <button onclick="showPage('page-journal')" class="ml-auto bg-cyan-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-cyan-700 transition-all text-sm flex-shrink-0"> <!-- (FIXED) Tambah flex-shrink-0 -->
                                     Mulai
                                 </button>
                             </div>
@@ -430,13 +458,13 @@
                     <p class="text-base text-gray-500">Sortir pikiran yang bermanfaat & tidak bermanfaat.</p>
                     <span class="inline-block bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">+5 Poin</span>
                 </div>
-                <!-- Game 3: Puzzle Syukur (SEKARANG AKTIF) -->
+                <!-- Game 3: Puzzle Syukur (SEKARANG "MEMORY SYUKUR") -->
                 <div onclick="showPage('page-game-puzzle')" class="bg-white p-6 rounded-2xl shadow-lg cursor-pointer card-hover border-4 border-transparent hover:border-purple-300 space-y-4">
                     <div class="p-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg w-min shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6H5a2 2 0 0 0-2 2v10"></path><path d="m21 16-4-4-4 4"></path><path d="m6 9 3-3 3 3"></path><path d="M3 11v4a2 2 0 0 0 2 2h11"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     </div>
-                    <h4 class="text-2xl font-semibold text-gray-900">Puzzle Syukur</h4>
-                    <p class="text-base text-gray-500">Ungkap pesan syukur harian di balik puzzle.</p>
+                    <h4 class="text-2xl font-semibold text-gray-900">Memory Syukur</h4>
+                    <p class="text-base text-gray-500">Cocokkan 4 pasang kartu syukur harian.</p>
                     <span class="inline-block bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full">+10 Poin</span>
                 </div>
                 <!-- Game 4: Toples Kekhawatiran (BARU) -->
@@ -721,25 +749,25 @@
             </div>
         </div>
         
-        <!-- Halaman 10: Mini-Game Puzzle Syukur (FIXED) -->
+        <!-- Halaman 10: Mini-Game Puzzle Syukur (DIGANTI JADI MEMORY) -->
         <div id="page-game-puzzle" class="page p-6 md:p-12 hidden">
             <!-- Header Halaman -->
             <div class="flex items-center space-x-3 mb-8">
                 <button onclick="showPage('page-games');" class="p-2 rounded-full hover:bg-gray-200 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 </button>
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Puzzle Syukur</h1>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Memory Syukur</h1>
             </div>
             <!-- Konten Game -->
             <div class="flex flex-col items-center justify-center text-center bg-white rounded-2xl shadow-lg p-6 md:p-10">
-                 <p class="text-lg md:text-2xl text-gray-600 mb-6">Klik kotak untuk mengungkap pesan syukur harian!</p>
+                 <p id="puzzle-feedback" class="text-lg md:text-2xl text-gray-600 mb-6">Cari 4 pasang kartu yang cocok!</p>
                  <!-- Puzzle Grid -->
                  <div class="relative w-full max-w-md aspect-square">
                     <!-- Pesan Tersembunyi (FIXED z-index) -->
-                    <div id="puzzle-reward" class="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-purple-400 to-purple-600 text-white p-8 rounded-lg opacity-0 z-10">
+                    <div id="puzzle-reward" class="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-purple-400 to-purple-600 text-white p-8 rounded-lg opacity-0 z-10 scale-90 transition-all duration-300">
                         <span class="text-6xl">🎉</span>
-                        <h3 class="text-2xl font-bold mt-4">Kamu Hebat!</h3>
-                        <p class="text-lg mt-2">"Perawatan diri adalah bagaimana kamu mengambil kembali kekuatanmu."</p>
+                        <h3 class="text-2xl font-bold mt-4">Selesai!</h3>
+                        <p class="text-lg mt-2">Ingatanmu tajam! Kamu menemukan semua pasangan.</p>
                         <p class="text-lg font-semibold mt-4">+10 Poin didapatkan!</p>
                     </div>
                      <!-- Kotak Puzzle (FIXED z-index) -->
@@ -857,7 +885,13 @@
         let testAnswers = {}; // Menyimpan jawaban tes
         let currentTestQuestions = []; // Akan diisi oleh startTest
         let currentMood = '😌'; // Mood default
-        let puzzleTilesClicked = 0; // (BARU) Untuk puzzle
+        
+        // (BARU) Variabel Game Memory
+        let firstCard = null;
+        let secondCard = null;
+        let lockBoard = false; // Mencegah klik saat kartu dicocokkan
+        let pairsFound = 0;
+        
         let worryCount = 0; // (BARU) Untuk toples
 
         // Data dummy untuk histori jurnal (BARU)
@@ -1195,47 +1229,110 @@
             setTimeout(loadThought, 1500);
         }
         
-        // --- LOGIKA GAME PUZZLE (FIXED) ---
+        // --- LOGIKA GAME MEMORY (FIXED) ---
         function initPuzzle() {
             const grid = document.getElementById('puzzle-grid');
             const reward = document.getElementById('puzzle-reward');
+            const feedback = document.getElementById('puzzle-feedback');
             if (!grid || !reward) return;
             
             grid.innerHTML = ''; // Kosongkan grid
-            puzzleTilesClicked = 0;
+            pairsFound = 0;
+            lockBoard = false;
             
             // Sembunyikan reward, pastikan grid terlihat
-            reward.classList.add('opacity-0', 'z-10');
-            reward.classList.remove('opacity-100', 'z-30');
+            reward.classList.add('opacity-0', 'scale-90', 'z-10');
+            reward.classList.remove('opacity-100', 'scale-100', 'z-30');
             grid.classList.add('z-20');
             grid.classList.remove('opacity-0');
+            feedback.textContent = "Cari 4 pasang kartu yang cocok!";
 
-            // Buat 9 tiles
-            for (let i = 0; i < 9; i++) {
+            // 4 pasang + 1 zonk = 9 kartu
+            const cards = ['😊', '😊', '💖', '💖', '✨', '✨', '🧘', '🧘', '🤔'];
+            
+            // Shuffle cards
+            cards.sort(() => 0.5 - Math.random());
+            
+            cards.forEach(card => {
                 const tile = document.createElement('button');
-                tile.className = 'puzzle-tile w-full aspect-square rounded-lg shadow-md hover:bg-indigo-300 active:scale-95';
-                tile.dataset.index = i;
+                tile.className = 'puzzle-tile w-full aspect-square rounded-lg shadow-md relative';
+                tile.dataset.value = card;
                 
-                tile.onclick = () => {
-                    if (tile.classList.contains('flipped')) return;
-                    
-                    tile.classList.add('flipped');
-                    puzzleTilesClicked++;
-                    
-                    if (puzzleTilesClicked === 9) {
-                        // Tampilkan reward
-                        setTimeout(() => {
-                            grid.classList.add('opacity-0'); // Sembunyikan grid
-                            grid.classList.remove('z-20');
-                            reward.classList.remove('opacity-0', 'z-10');
-                            reward.classList.add('opacity-100', 'z-30'); // Tampilkan reward
-                            userPoints += 10;
-                            showCustomAlert("Puzzle Selesai! +10 Poin 🧩", "success");
-                        }, 300);
-                    }
-                };
+                tile.innerHTML = `
+                    <div class="puzzle-front absolute inset-0 cursor-pointer shadow-md hover:bg-indigo-300"></div>
+                    <div class="puzzle-back text-4xl font-bold">
+                        ${card}
+                    </div>
+                `;
+                
+                tile.onclick = () => flipCard(tile);
                 grid.appendChild(tile);
+            });
+        }
+        
+        function flipCard(card) {
+            if (lockBoard) return;
+            if (card === firstCard) return; // Mencegah klik kartu yang sama dua kali
+            
+            card.classList.add('flipped');
+            
+            if (!firstCard) {
+                firstCard = card;
+                return;
             }
+            
+            secondCard = card;
+            lockBoard = true; // Kunci board
+            
+            checkForMatch();
+        }
+        
+        function checkForMatch() {
+            const isMatch = firstCard.dataset.value === secondCard.dataset.value;
+            
+            if (isMatch) {
+                disableCards();
+            } else {
+                unflipCards();
+            }
+        }
+        
+        function disableCards() {
+            firstCard.classList.add('matched');
+            secondCard.classList.add('matched');
+            
+            pairsFound++;
+            userPoints += 2; // +2 poin per pasangan
+            document.getElementById('puzzle-feedback').textContent = "Cocok! +2 Poin";
+            
+            if (pairsFound === 4) {
+                // Game Selesai
+                const reward = document.getElementById('puzzle-reward');
+                const grid = document.getElementById('puzzle-grid');
+                setTimeout(() => {
+                    grid.classList.add('opacity-0');
+                    grid.classList.remove('z-20');
+                    reward.classList.remove('opacity-0', 'scale-90', 'z-10');
+                    reward.classList.add('opacity-100', 'scale-100', 'z-30');
+                    userPoints += 2; // Bonus +2 poin (total 10)
+                    showCustomAlert("Puzzle Selesai! +10 Poin 🧩", "success");
+                }, 1000);
+            }
+            
+            resetBoard();
+        }
+        
+        function unflipCards() {
+             document.getElementById('puzzle-feedback').textContent = "Bukan pasangan!";
+            setTimeout(() => {
+                firstCard.classList.remove('flipped');
+                secondCard.classList.remove('flipped');
+                resetBoard();
+            }, 1000);
+        }
+        
+        function resetBoard() {
+            [firstCard, secondCard, lockBoard] = [null, null, false];
         }
         
         // --- LOGIKA GAME WORRY JAR (ANIMATED) ---
