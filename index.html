@@ -86,9 +86,10 @@
             }
         }
 
-        /* Halaman Welcome (BARU) */
+        /* Halaman Welcome (Responsive FIX) */
         #page-welcome {
             transition: opacity 0.5s ease-in-out;
+            min-height: 100vh; /* Mengganti h-screen */
         }
 
 
@@ -145,13 +146,37 @@
         #quote-track {
              transition: transform 0.7s ease-in-out;
         }
+        
+        /* Puzzle Game (BARU) */
+        .puzzle-tile {
+            transition: all 0.3s ease;
+            background-color: #c7d2fe; /* indigo-200 */
+        }
+        .puzzle-tile.flipped {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+        #puzzle-reward {
+            transition: all 0.5s ease;
+        }
+        
+        /* Animasi Shake (BARU) */
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          50% { transform: translateX(5px); }
+          75% { transform: translateX(-5px); }
+        }
+        .shake-anim { animation: shake 0.5s ease-in-out; }
+
 
     </style>
 </head>
 <body class="min-h-screen">
 
-    <!-- Halaman Welcome (BARU) -->
-    <div id="page-welcome" onclick="enterApp()" class="flex flex-col items-center justify-center h-screen w-screen cursor-pointer bg-gradient-to-br from-indigo-50 to-purple-50 p-8 text-center">
+    <!-- Halaman Welcome (Responsive FIX) -->
+    <div id="page-welcome" onclick="enterApp()" class="flex flex-col items-center justify-center w-screen cursor-pointer bg-gradient-to-br from-indigo-50 to-purple-50 p-8 text-center min-h-screen">
         <!-- Ilustrasi Digital BARU -->
         <div class="w-full max-w-sm md:max-w-md">
             <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -183,8 +208,8 @@
                 <p id="vibe-header" class="text-base md:text-lg text-gray-500 transition-all mt-1">Bagaimana perasaanmu hari ini?</p>
             </div>
             
-            <!-- Grid Dashboard (Layout Diperbaiki) -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+            <!-- Grid Dashboard (Layout Diperbaiki - items-stretch) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch"> <!-- Ganti items-start ke items-stretch -->
                 <!-- Kolom Kiri (Aktivitas Utama) -->
                 <div class="lg:col-span-2 space-y-6 flex flex-col">
                      <!-- Insight dari Soul-AI (Sesuai Gambar) -->
@@ -211,9 +236,26 @@
                             <!-- Dots akan di-generate oleh JS -->
                         </div>
                     </div>
+                    
+                    <!-- Tantangan Harian (BARU) -->
+                    <div class="bg-cyan-50 p-6 rounded-2xl shadow-lg card-hover relative">
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Tantangan Harian</h3>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-4xl p-3 bg-cyan-200 text-cyan-700 rounded-lg">🎯</span>
+                                <div>
+                                    <p class="font-semibold text-gray-700">Tulis 3 Hal yang Kamu Syukuri</p>
+                                    <p class="text-sm text-gray-500">Latih rasa syukurmu hari ini di Jurnal Harian.</p>
+                                </div>
+                                <button onclick="showPage('page-journal')" class="ml-auto bg-cyan-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-cyan-700 transition-all text-sm">
+                                    Mulai
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Hasil Tes Terakhir (Estetika BARU) -->
-                    <div class="bg-blue-50 p-6 rounded-2xl shadow-lg card-hover flex-1 relative"> <!-- Tambah flex-1 & bg-blue-50 -->
+                    <div class="bg-blue-50 p-6 rounded-2xl shadow-lg card-hover relative flex-1"> <!-- Tambah flex-1 -->
                         <div class="relative z-10">
                             <h3 class="text-xl font-semibold text-gray-800 mb-4">Hasil Tes Terakhir</h3>
                             <p class="text-gray-500 mb-4">Ini adalah ringkasan dari tes terakhirmu. Kamu bisa mengambil tes ulang kapanpun.</p>
@@ -267,14 +309,14 @@
                             </div>
                         </div>
                     </div>
-                     <!-- Gamifikasi Poin (Kartu Berwarna & Simetris) -->
-                    <div class="bg-purple-50 p-6 rounded-2xl shadow-lg text-center card-hover flex-1 flex flex-col justify-center"> <!-- Tambah flex-1 & flex -->
+                     <!-- Gamifikasi Poin (Kartu Berwarna & Simetris - flex-1 DIKEMBALIKAN) -->
+                    <div class="bg-purple-50 p-6 rounded-2xl shadow-lg text-center card-hover flex-1 flex flex-col justify-center"> <!-- Tambah flex-1 -->
                         <h3 class="text-xl font-semibold text-gray-800">Poin Refleksi</h3>
                         <span id="total-points-home" class="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600 mt-2 block">120</span>
                         <p class="text-gray-500 text-sm md:text-base">Poin didapat dari jurnal & game.</p>
                     </div>
-                     <!-- Streak (Kartu Berwarna & Simetris) -->
-                    <div class="bg-orange-50 p-6 rounded-2xl shadow-lg text-center card-hover flex-1 flex flex-col justify-center"> <!-- Tambah flex-1 & flex -->
+                     <!-- Streak (Kartu Berwarna & Simetris - flex-1 DIKEMBALIKAN) -->
+                    <div class="bg-orange-50 p-6 rounded-2xl shadow-lg text-center card-hover flex-1 flex flex-col justify-center"> <!-- Tambah flex-1 -->
                         <h3 class="text-xl font-semibold text-gray-800">Streak Jurnal</h3>
                         <span id="streak-count-home" class="text-5xl md:text-6xl font-extrabold text-orange-500 mt-2 block">🔥 5</span>
                         <p class="text-gray-500 text-sm md:text-base">Hari berturut-turut!</p>
@@ -361,7 +403,7 @@
             </div>
         </div>
 
-        <!-- Halaman 3: Pilihan Mini-Games (Responsif) -->
+        <!-- Halaman 3: Pilihan Mini-Games (Responsif & BARU) -->
         <div id="page-games" class="page p-6 md:p-12 space-y-8 hidden">
             <!-- Header Halaman -->
             <div>
@@ -388,13 +430,35 @@
                     <p class="text-base text-gray-500">Sortir pikiran yang bermanfaat & tidak bermanfaat.</p>
                     <span class="inline-block bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">+5 Poin</span>
                 </div>
-                <!-- Game 3: Puzzle Syukur (Mock) -->
-                <div class="bg-white p-6 rounded-2xl shadow-lg transition-all opacity-60 space-y-4 border-4 border-transparent">
+                <!-- Game 3: Puzzle Syukur (SEKARANG AKTIF) -->
+                <div onclick="showPage('page-game-puzzle')" class="bg-white p-6 rounded-2xl shadow-lg cursor-pointer card-hover border-4 border-transparent hover:border-purple-300 space-y-4">
                     <div class="p-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg w-min shadow-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6H5a2 2 0 0 0-2 2v10"></path><path d="m21 16-4-4-4 4"></path><path d="m6 9 3-3 3 3"></path><path d="M3 11v4a2 2 0 0 0 2 2h11"></path></svg>
                     </div>
                     <h4 class="text-2xl font-semibold text-gray-900">Puzzle Syukur</h4>
-                    <p class="text-base text-gray-500">Susun potongan gambar & pesan syukur harian.</p>
+                    <p class="text-base text-gray-500">Ungkap pesan syukur harian di balik puzzle.</p>
+                    <span class="inline-block bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full">+10 Poin</span>
+                </div>
+                <!-- Game 4: Toples Kekhawatiran (BARU) -->
+                <div onclick="showPage('page-game-worry')" class="bg-white p-6 rounded-2xl shadow-lg cursor-pointer card-hover border-4 border-transparent hover:border-pink-300 space-y-4">
+                    <div class="p-4 bg-gradient-to-br from-pink-400 to-pink-600 rounded-lg w-min shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.81v2.32c0 .5.2.98.6 1.35l4.1 3.9c.7.67 1.2 1.5.1 2.45-1.1 1-.4 2.8 1 3.4.9.4 2.1.2 3.1-.4l4.1-3.9c.4-.37.6-.85.6-1.35V2.81"/>
+<path d="M7 21h10"/>
+<path d="M12 21v-2.5c0-.8-.7-1.5-1.5-1.5h-1c-.8 0-1.5.7-1.5 1.5V21"/>
+<path d="M6 18c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2"/>
+<path d="M14 5v.5c0 .3.2.5.5.5h1c.3 0 .5-.2.5-.5V5"/></svg>
+                    </div>
+                    <h4 class="text-2xl font-semibold text-gray-900">Toples Kekhawatiran</h4>
+                    <p class="text-base text-gray-500">Lepaskan kecemasanmu dengan menuliskannya di sini.</p>
+                    <span class="inline-block bg-pink-100 text-pink-800 text-sm font-medium px-3 py-1 rounded-full">+5 Poin</span>
+                </div>
+                <!-- Game 5: Soundscape (BARU - COMING SOON) -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg transition-all opacity-60 space-y-4 border-4 border-transparent">
+                    <div class="p-4 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-lg w-min shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19c-5 0-9-3.5-9-8V7c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v4c0 4.5-4 8-9 8z"/><path d="M12 11v0"/><path d="M8.5 14v0"/><path d="M15.5 14v0"/></svg>
+                    </div>
+                    <h4 class="text-2xl font-semibold text-gray-900">Soundscape</h4>
+                    <p class="text-base text-gray-500">Dengarkan suara alam yang menenangkan pikiranmu.</p>
                     <span class="inline-block bg-gray-200 text-gray-600 text-sm font-medium px-3 py-1 rounded-full">Segera Hadir</span>
                 </div>
             </div>
@@ -656,12 +720,70 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Halaman 10: Mini-Game Puzzle Syukur (FIXED) -->
+        <div id="page-game-puzzle" class="page p-6 md:p-12 hidden">
+            <!-- Header Halaman -->
+            <div class="flex items-center space-x-3 mb-8">
+                <button onclick="showPage('page-games');" class="p-2 rounded-full hover:bg-gray-200 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                </button>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Puzzle Syukur</h1>
+            </div>
+            <!-- Konten Game -->
+            <div class="flex flex-col items-center justify-center text-center bg-white rounded-2xl shadow-lg p-6 md:p-10">
+                 <p class="text-lg md:text-2xl text-gray-600 mb-6">Klik kotak untuk mengungkap pesan syukur harian!</p>
+                 <!-- Puzzle Grid -->
+                 <div class="relative w-full max-w-md aspect-square">
+                    <!-- Pesan Tersembunyi (FIXED z-index) -->
+                    <div id="puzzle-reward" class="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-purple-400 to-purple-600 text-white p-8 rounded-lg opacity-0 z-10">
+                        <span class="text-6xl">🎉</span>
+                        <h3 class="text-2xl font-bold mt-4">Kamu Hebat!</h3>
+                        <p class="text-lg mt-2">"Perawatan diri adalah bagaimana kamu mengambil kembali kekuatanmu."</p>
+                        <p class="text-lg font-semibold mt-4">+10 Poin didapatkan!</p>
+                    </div>
+                     <!-- Kotak Puzzle (FIXED z-index) -->
+                     <div id="puzzle-grid" class="absolute inset-0 grid grid-cols-3 gap-2 z-20">
+                        <!-- Tiles akan di-generate JS -->
+                     </div>
+                 </div>
+            </div>
+        </div>
+        
+        <!-- Halaman 11: Mini-Game Toples Kekhawatiran (BARU) -->
+        <div id="page-game-worry" class="page p-6 md:p-12 hidden">
+            <!-- Header Halaman -->
+            <div class="flex items-center space-x-3 mb-8">
+                <button onclick="showPage('page-games');" class="p-2 rounded-full hover:bg-gray-200 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                </button>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Toples Kekhawatiran</h1>
+            </div>
+            <!-- Konten Game -->
+            <div class="flex flex-col items-center justify-center text-center bg-white rounded-2xl shadow-lg p-6 md:p-10">
+                 <p class="text-lg md:text-2xl text-gray-600 mb-6">Tulis kekhawatiranmu dan masukkan ke dalam toples untuk dilepaskan.</p>
+                 
+                 <!-- Ilustrasi Toples -->
+                 <div class="relative my-4">
+                    <svg id="worry-jar-svg" xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="#F472B6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="opacity-30 transition-all duration-500"><path d="M8 2.81v2.32c0 .5.2.98.6 1.35l4.1 3.9c.7.67 1.2 1.5.1 2.45-1.1 1-.4 2.8 1 3.4.9.4 2.1.2 3.1-.4l4.1-3.9c.4-.37.6-.85.6-1.35V2.81"/><path d="M7 21h10"/><path d="M12 21v-2.5c0-.8-.7-1.5-1.5-1.5h-1c-.8 0-1.5.7-1.5 1.5V21"/><path d="M6 18c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2"/><path d="M14 5v.5c0 .3.2.5.5.5h1c.3 0 .5-.2.5-.5V5"/></svg>
+                    <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-pink-600 font-bold text-4xl" id="worry-count">0</p>
+                 </div>
+                 <p class="text-gray-500 text-sm mb-4">Kekhawatiran di dalam toples</p>
+                 
+                 <!-- Input -->
+                 <textarea id="worry-input" class="w-full max-w-lg h-24 p-4 text-base border border-gray-200 rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-pink-400" placeholder="Tulis satu kekhawatiranmu di sini..."></textarea>
+                 <button onclick="saveWorry()" class="w-full max-w-lg mt-4 bg-gradient-to-r from-pink-500 to-pink-600 text-white font-semibold py-3 px-5 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                    Masukkan ke Toples & Lepaskan
+                </button>
+            </div>
+        </div>
 
     </main>
 
-    <!-- Navigasi Bawah Horizontal (FLOATING & RESPONSIVE) -->
-    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.05)] p-3 flex justify-around items-center
-                            md:bottom-6 md:left-1/2 md:-translate-x-1/2 md:right-auto md:rounded-full md:space-x-4 hidden opacity-0">
+    <!-- Navigasi Bawah Horizontal (FLOATING & RESPONSIVE - FIXED) -->
+    <nav id="bottom-nav" class="fixed bottom-4 z-50 bg-white/80 backdrop-blur-md shadow-xl p-3 flex justify-around items-center hidden opacity-0 
+                            left-1/2 -translate-x-1/2 w-[95%] rounded-full
+                            md:w-auto">
         <!-- Tombol Home -->
         <button id="nav-home-btn" onclick="showPage('page-home')" class="bottom-nav-btn p-2 flex flex-col items-center group active">
              <span class="nav-icon p-3 rounded-full">
@@ -735,6 +857,8 @@
         let testAnswers = {}; // Menyimpan jawaban tes
         let currentTestQuestions = []; // Akan diisi oleh startTest
         let currentMood = '😌'; // Mood default
+        let puzzleTilesClicked = 0; // (BARU) Untuk puzzle
+        let worryCount = 0; // (BARU) Untuk toples
 
         // Data dummy untuk histori jurnal (BARU)
         let journalHistoryData = [
@@ -804,7 +928,7 @@
             navButtons.forEach(btn => {
                 const btnPageId = 'page-' + btn.id.replace('-btn', '').replace('nav-', '');
                 
-                let isGamePage = (pageId === 'page-game-breathe' || pageId === 'page-game-filter');
+                let isGamePage = (pageId === 'page-game-breathe' || pageId === 'page-game-filter' || pageId === 'page-game-puzzle' || pageId === 'page-game-worry'); // (UPDATE)
                 let isTestPage = (pageId === 'page-result');
 
                 if (btnPageId === pageId || 
@@ -831,6 +955,12 @@
             }
             if (pageId === 'page-game-filter') {
                 loadThought(); 
+            }
+            if (pageId === 'page-game-puzzle') { // (BARU)
+                initPuzzle();
+            }
+            if (pageId === 'page-game-worry') { // (BARU)
+                document.getElementById('worry-count').textContent = worryCount;
             }
             if (pageId === 'page-profile') {
                 updateProfile();
@@ -1064,6 +1194,74 @@
             currentThoughtIndex++; 
             setTimeout(loadThought, 1500);
         }
+        
+        // --- LOGIKA GAME PUZZLE (FIXED) ---
+        function initPuzzle() {
+            const grid = document.getElementById('puzzle-grid');
+            const reward = document.getElementById('puzzle-reward');
+            if (!grid || !reward) return;
+            
+            grid.innerHTML = ''; // Kosongkan grid
+            puzzleTilesClicked = 0;
+            
+            // Sembunyikan reward, pastikan grid terlihat
+            reward.classList.add('opacity-0', 'z-10');
+            reward.classList.remove('opacity-100', 'z-30');
+            grid.classList.add('z-20');
+            grid.classList.remove('opacity-0');
+
+            // Buat 9 tiles
+            for (let i = 0; i < 9; i++) {
+                const tile = document.createElement('button');
+                tile.className = 'puzzle-tile w-full aspect-square rounded-lg shadow-md hover:bg-indigo-300 active:scale-95';
+                tile.dataset.index = i;
+                
+                tile.onclick = () => {
+                    if (tile.classList.contains('flipped')) return;
+                    
+                    tile.classList.add('flipped');
+                    puzzleTilesClicked++;
+                    
+                    if (puzzleTilesClicked === 9) {
+                        // Tampilkan reward
+                        setTimeout(() => {
+                            grid.classList.add('opacity-0'); // Sembunyikan grid
+                            grid.classList.remove('z-20');
+                            reward.classList.remove('opacity-0', 'z-10');
+                            reward.classList.add('opacity-100', 'z-30'); // Tampilkan reward
+                            userPoints += 10;
+                            showCustomAlert("Puzzle Selesai! +10 Poin 🧩", "success");
+                        }, 300);
+                    }
+                };
+                grid.appendChild(tile);
+            }
+        }
+        
+        // --- LOGIKA GAME WORRY JAR (ANIMATED) ---
+        function saveWorry() {
+            const input = document.getElementById('worry-input');
+            const countSpan = document.getElementById('worry-count');
+            const jarIcon = document.getElementById('worry-jar-svg');
+            
+            if (input.value.trim() === "") {
+                showCustomAlert("Tulis kekhawatiranmu dulu", "error");
+                return;
+            }
+            
+            worryCount++;
+            userPoints += 5;
+            countSpan.textContent = worryCount;
+            input.value = "";
+            
+            // Animasi & Feedback
+            showCustomAlert("Kekhawatiran dilepaskan! +5 Poin 🏺", "success");
+            jarIcon.classList.add('shake-anim');
+            setTimeout(() => {
+                jarIcon.classList.remove('shake-anim');
+            }, 500);
+        }
+
 
         // --- LOGIKA PROFIL ---
         function updateProfile() {
