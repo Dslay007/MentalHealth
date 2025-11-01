@@ -31,6 +31,7 @@
             overflow-y: auto;
             /* Padding bawah untuk memberi ruang bagi nav bar */
             padding-bottom: 120px; 
+            transition: opacity 0.5s ease-in-out;
         }
 
         /* Scrollbar kustom */
@@ -46,6 +47,9 @@
 
 
         /* Style untuk Nav Bar Bawah BARU (FLOATING & RESPONSIVE) */
+        #bottom-nav {
+            transition: opacity 0.5s ease-in-out;
+        }
         .bottom-nav-btn {
             position: relative;
             transition: all 0.2s ease-in-out;
@@ -82,6 +86,11 @@
             }
         }
 
+        /* Halaman Welcome (BARU) */
+        #page-welcome {
+            transition: opacity 0.5s ease-in-out;
+        }
+
 
         /* Animasi untuk lingkaran pernapasan */
         @keyframes breathe {
@@ -112,18 +121,20 @@
         /* Transisi hover yang lebih 'playful' */
         .card-hover {
              transition: all 0.2s ease-in-out;
+             position: relative; /* Diperlukan untuk SVG absolut */
+             overflow: hidden; /* Mencegah SVG meluap */
         }
         .card-hover:hover {
             transform: scale(1.03);
             box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.15);
         }
 
-        /* Animasi untuk toggle switch */
+        /* Animasi untuk toggle switch (FIXED) */
         .toggle-checkbox:checked + .toggle-label {
             background-color: #4f46e5; /* indigo-600 */
         }
         .toggle-checkbox:checked + .toggle-label .toggle-dot {
-            transform: translateX(100%);
+            transform: translateX(20px); /* 1.25rem */
         }
 
         /* Perbaikan Carousel Quote (FIXED) */
@@ -139,8 +150,24 @@
 </head>
 <body class="min-h-screen">
 
+    <!-- Halaman Welcome (BARU) -->
+    <div id="page-welcome" onclick="enterApp()" class="flex flex-col items-center justify-center h-screen w-screen cursor-pointer bg-gradient-to-br from-indigo-50 to-purple-50 p-8 text-center">
+        <!-- Ilustrasi Digital BARU -->
+        <div class="w-full max-w-sm md:max-w-md">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#C7D2FE" d="M48.1,-63.3C61.4,-52.1,70.5,-36.3,75.1,-18.9C79.7,-1.5,80,17.4,70.7,30.3C61.5,43.2,42.8,49.9,26.4,56.7C10.1,63.5,-3.8,70.2,-19.1,68C-34.4,65.8,-51.1,54.7,-62.4,40.1C-73.7,25.6,-79.6,7.6,-77.3,-9.3C-75,-26.2,-64.5,-42,-50.9,-53.2C-37.3,-64.3,-20.6,-70.8,-3,-69.6C14.6,-68.4,29.3,-70.4,48.1,-63.3Z" transform="translate(100 100) scale(0.9)" />
+                <text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="90" font-family="Inter, sans-serif" fill="#4F46E5" font-weight="bold">🧘</text>
+            </svg>
+        </div>
+        
+        <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mt-8">Selamat Datang di SoulCare</h1>
+        <p class="text-base md:text-xl text-gray-600 mt-4 max-w-lg">Ruang aman digitalmu untuk refleksi, tes, dan penguatan kesehatan mental.</p>
+        <p class="text-lg md:text-2xl font-semibold text-indigo-600 mt-12 animate-pulse">Klik di mana saja untuk memulai</p>
+    </div>
+
+
     <!-- Konten Layar Aplikasi (Bisa di-scroll) -->
-    <main id="screen-content" class="relative"> 
+    <main id="screen-content" class="relative hidden opacity-0"> 
         
         <!-- Blob Gradien Latar Belakang */ -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
@@ -161,7 +188,7 @@
                 <!-- Kolom Kiri (Aktivitas Utama) -->
                 <div class="lg:col-span-2 space-y-6 flex flex-col">
                      <!-- Insight dari Soul-AI (Sesuai Gambar) -->
-                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-2xl shadow-lg flex items-center space-x-4 md:space-x-5 card-hover relative overflow-hidden">
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-2xl shadow-lg flex items-center space-x-4 md:space-x-5 card-hover relative">
                         <div class="flex-shrink-0 z-10">
                             <!-- Icon AI (mirip gambar) -->
                             <div class="p-3 bg-white/20 rounded-xl">
@@ -186,40 +213,42 @@
                     </div>
 
                     <!-- Hasil Tes Terakhir (Estetika BARU) -->
-                    <div class="bg-blue-50 p-6 rounded-2xl shadow-lg card-hover flex-1"> <!-- Tambah flex-1 & bg-blue-50 -->
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Hasil Tes Terakhir</h3>
-                        <p class="text-gray-500 mb-4">Ini adalah ringkasan dari tes terakhirmu. Kamu bisa mengambil tes ulang kapanpun.</p>
-                        <!-- Chart dummy sederhana -->
-                        <div class="space-y-3">
-                            <div class="flex items-center">
-                                <span class="w-24 font-medium text-gray-600 text-sm md:text-base">Stres</span>
-                                <div class="flex-1 bg-gray-200 rounded-full h-4">
-                                    <div class="bg-gradient-to-r from-red-400 to-red-600 h-4 rounded-full" style="width: 70%"></div>
+                    <div class="bg-blue-50 p-6 rounded-2xl shadow-lg card-hover flex-1 relative"> <!-- Tambah flex-1 & bg-blue-50 -->
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Hasil Tes Terakhir</h3>
+                            <p class="text-gray-500 mb-4">Ini adalah ringkasan dari tes terakhirmu. Kamu bisa mengambil tes ulang kapanpun.</p>
+                            <!-- Chart dummy sederhana -->
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <span class="w-24 font-medium text-gray-600 text-sm md:text-base">Stres</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-4">
+                                        <div class="bg-gradient-to-r from-red-400 to-red-600 h-4 rounded-full" style="width: 70%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-24 font-medium text-gray-600 text-sm md:text-base">Kecemasan</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-4">
+                                        <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 h-4 rounded-full" style="width: 40%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-24 font-medium text-gray-600 text-sm md:text-base">Depresi</span>
+                                    <div class="flex-1 bg-gray-200 rounded-full h-4">
+                                        <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-4 rounded-full" style="width: 25%"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="flex items-center">
-                                <span class="w-24 font-medium text-gray-600 text-sm md:text-base">Kecemasan</span>
-                                <div class="flex-1 bg-gray-200 rounded-full h-4">
-                                    <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 h-4 rounded-full" style="width: 40%"></div>
-                                </div>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="w-24 font-medium text-gray-600 text-sm md:text-base">Depresi</span>
-                                <div class="flex-1 bg-gray-200 rounded-full h-4">
-                                    <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-4 rounded-full" style="width: 25%"></div>
-                                </div>
-                            </div>
+                            <button onclick="showPage('page-result')" class="mt-5 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Lihat Detail Hasil &rarr;</button>
                         </div>
-                        <button onclick="showPage('page-result')" class="mt-5 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Lihat Detail Hasil &rarr;</button>
                     </div>
                 </div>
 
                 <!-- Kolom Kanan (Gamifikasi - Layout Diperbaiki) -->
                 <div class="lg:col-span-1 space-y-6 flex flex-col">
                     <!-- Pilihan Vibe Cepat (Estetika BARU) -->
-                    <div class="bg-yellow-50 p-6 rounded-2xl shadow-lg card-hover">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Vibe Cepat Hari Ini</h3>
-                        <div class="grid grid-cols-2 gap-3" id="vibe-selection">
+                    <div class="bg-yellow-50 p-6 rounded-2xl shadow-lg card-hover relative">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4 relative z-10">Vibe Cepat Hari Ini</h3>
+                        <div class="grid grid-cols-2 gap-3 relative z-10" id="vibe-selection">
                             <div onclick="selectVibe('Senang', this)" class="vibe-btn p-4 bg-white rounded-xl cursor-pointer hover:bg-gray-50 transition-all active:scale-95 ring-0 ring-indigo-500 flex items-center space-x-3">
                                 <span class="text-2xl md:text-3xl">😊</span>
                                 <p class="font-medium text-indigo-800 text-sm md:text-base">Senang</p>
@@ -292,16 +321,18 @@
                     </div>
                     <!-- Text Area -->
                     <textarea id="journal-input" class="w-full h-40 p-5 text-base border border-gray-200 rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Tuliskan ceritamu di sini..."></textarea>
-                    <!-- Pengingat -->
+                    
+                    <!-- Pengingat (FIXED) -->
                     <div class="bg-white p-5 rounded-xl shadow-lg flex justify-between items-center">
                         <h3 class="text-sm md:text-base font-semibold text-gray-700">Setel Pengingat Jurnal Harian</h3>
                         <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
-                            <input type="checkbox" name="toggle" id="journal-reminder" class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-                            <label for="journal-reminder" class="toggle-label block overflow-hidden h-7 rounded-full bg-gray-300 cursor-pointer transition-colors duration-200 ease-in-out">
-                                 <span class="toggle-dot absolute left-0 inline-block w-7 h-7 bg-white rounded-full shadow-md transform transition-transform duration-200 ease-in-out"></span>
+                            <input type="checkbox" name="toggle" id="journal-reminder" class="toggle-checkbox absolute w-full h-full opacity-0 z-10 cursor-pointer"/>
+                            <label for="journal-reminder" class="toggle-label block overflow-hidden h-7 w-12 rounded-full bg-gray-300 cursor-pointer transition-colors duration-200 ease-in-out relative">
+                                 <span class="toggle-dot absolute left-1 top-1 inline-block w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ease-in-out"></span>
                             </label>
                         </div>
                     </div>
+
                     <!-- Tombol Simpan -->
                     <button onclick="saveJournal()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-4 px-6 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 active:scale-95">
                         Simpan & Dapatkan 10 Poin 🔥
@@ -428,7 +459,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Kolom Kiri: Info & Streak -->
                 <div class="lg:col-span-1 space-y-6">
-                    <div class="flex flex-col items-center space-y-3 bg-purple-50 p-8 rounded-2xl shadow-lg">
+                    <div class="flex flex-col items-center space-y-3 bg-purple-50 p-8 rounded-2xl shadow-lg card-hover">
                         <img src="https://placehold.co/120x120/E9D5FF/4C1D95?text=DH" alt="Foto Profil" class="w-32 h-32 rounded-full border-4 border-purple-200 shadow-lg">
                         <h2 class="text-3xl font-semibold">Dona Haryanto</h2>
                         <p class="text-base text-gray-500">Bergabung Sejak 2025</p>
@@ -447,39 +478,41 @@
                     </div>
                 </div>
                 <!-- Kolom Kanan: Pencapaian (FIXED & Deskripsi BARU) -->
-                <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg">
-                     <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Lencana Pencapaian</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                        <!-- Lencana 1 -->
-                        <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
-                            <span class="text-6xl">🧘</span>
-                            <p class="text-md font-semibold text-gray-700 mt-2">Pikiran Tenang</p>
-                            <p class="text-xs text-gray-500 mt-1">Selesaikan 5x mini-game "Tarik Napas".</p>
-                        </div>
-                        <!-- Lencana 2 -->
-                        <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
-                            <span class="text-6xl">✍️</span>
-                            <p class="text-md font-semibold text-gray-700 mt-2">Penulis Jurnal</p>
-                            <p class="text-xs text-gray-500 mt-1">Tulis jurnal 3 hari berturut-turut.</p>
-                        </div>
-                        <!-- Lencana 3 -->
-                        <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
-                            <span class="text-6xl">🧠</span>
-                            <p class="text-md font-semibold text-gray-700 mt-2">Penyaring Pikiran</p>
-                            <p class="text-xs text-gray-500 mt-1">Mainkan 10x "Filter Pikiran".</p>
-                        </div>
-                        <!-- Lencana 4 (Terkunci) -->
-                        <div class="text-center p-4 bg-gray-100 rounded-lg opacity-40 transition-all hover:scale-105 shadow flex flex-col items-center">
-                            <span class="text-6xl">💪</span>
-                            <p class="text-md font-semibold text-gray-700 mt-2">Mental Kuat</p>
-                            <p class="text-xs text-gray-500 mt-1">Capai 7 hari streak jurnal.</p>
+                <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Lencana Pencapaian</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                            <!-- Lencana 1 -->
+                            <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
+                                <span class="text-6xl">🧘</span>
+                                <p class="text-md font-semibold text-gray-700 mt-2">Pikiran Tenang</p>
+                                <p class="text-xs text-gray-500 mt-1">Selesaikan 5x mini-game "Tarik Napas".</p>
+                            </div>
+                            <!-- Lencana 2 -->
+                            <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
+                                <span class="text-6xl">✍️</span>
+                                <p class="text-md font-semibold text-gray-700 mt-2">Penulis Jurnal</p>
+                                <p class="text-xs text-gray-500 mt-1">Tulis jurnal 3 hari berturut-turut.</p>
+                            </div>
+                            <!-- Lencana 3 -->
+                            <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
+                                <span class="text-6xl">🧠</span>
+                                <p class="text-md font-semibold text-gray-700 mt-2">Penyaring Pikiran</p>
+                                <p class="text-xs text-gray-500 mt-1">Mainkan 10x "Filter Pikiran".</p>
+                            </div>
+                            <!-- Lencana 4 (Terkunci) -->
+                            <div class="text-center p-4 bg-gray-100 rounded-lg opacity-40 transition-all hover:scale-105 shadow flex flex-col items-center">
+                                <span class="text-6xl">💪</span>
+                                <p class="text-md font-semibold text-gray-700 mt-2">Mental Kuat</p>
+                                <p class="text-xs text-gray-500 mt-1">Capai 7 hari streak jurnal.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
          </div>
 
-        <!-- Halaman 7: Tes Awal (Responsif) -->
+        <!-- Halaman 7: Tes Awal (Responsif & Ilustrasi DIHAPUS) -->
         <div id="page-test" class="page p-6 md:p-12 hidden">
              <!-- Header Halaman -->
             <div>
@@ -489,35 +522,35 @@
             <!-- Pilihan Kategori Tes -->
             <div id="test-categories" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 <!-- Kategori 1: Tes Stres -->
-                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-red-400 flex flex-col">
-                    <div class="p-4 bg-gradient-to-br from-red-400 to-red-600 rounded-xl w-min mb-4 shadow-lg">
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-red-400 flex flex-col relative z-0">
+                    <div class="p-4 bg-gradient-to-br from-red-400 to-red-600 rounded-xl w-min mb-4 shadow-lg relative z-10">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="4" y2="8"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="20" y1="20" x2="20" y2="12"></line></svg>
                     </div>
-                    <h3 class="text-2xl font-semibold text-gray-900">Tes Stres</h3>
-                    <p class="text-gray-600 mt-2 flex-1">Merasa tertekan? Cek level stresmu (5 pertanyaan).</p>
-                    <button onclick="startTest('stres')" class="mt-4 w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                    <h3 class="text-2xl font-semibold text-gray-900 relative z-10">Tes Stres</h3>
+                    <p class="text-gray-600 mt-2 flex-1 relative z-10">Merasa tertekan? Cek level stresmu (5 pertanyaan).</p>
+                    <button onclick="startTest('stres')" class="mt-4 w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95 relative z-10">
                         Mulai Tes
                     </button>
                 </div>
                 <!-- Kategori 2: Tes Kecemasan -->
-                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-yellow-400 flex flex-col">
-                    <div class="p-4 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl w-min mb-4 shadow-lg">
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-yellow-400 flex flex-col relative z-0">
+                    <div class="p-4 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl w-min mb-4 shadow-lg relative z-10">
                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                     </div>
-                    <h3 class="text-2xl font-semibold text-gray-900">Tes Kecemasan</h3>
-                    <p class="text-gray-600 mt-2 flex-1">Sering cemas atau panik? Tes ini (5 pertanyaan) bisa membantu.</p>
-                    <button onclick="startTest('cemas')" class="mt-4 w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                    <h3 class="text-2xl font-semibold text-gray-900 relative z-10">Tes Kecemasan</h3>
+                    <p class="text-gray-600 mt-2 flex-1 relative z-10">Sering cemas atau panik? Tes ini (5 pertanyaan) bisa membantu.</p>
+                    <button onclick="startTest('cemas')" class="mt-4 w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95 relative z-10">
                         Mulai Tes
                     </button>
                 </div>
                 <!-- Kategori 3: Tes Mood/Depresi -->
-                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-blue-400 flex flex-col">
-                    <div class="p-4 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl w-min mb-4 shadow-lg">
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg card-hover border-4 border-transparent hover:border-blue-400 flex flex-col relative z-0">
+                    <div class="p-4 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl w-min mb-4 shadow-lg relative z-10">
                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
                     </div>
-                    <h3 class="text-2xl font-semibold text-gray-900">Tes Mood (Depresi)</h3>
-                    <p class="text-gray-600 mt-2 flex-1">Merasa sedih belakangan ini? Cek mood-mu (5 pertanyaan).</p>
-                    <button onclick="startTest('depresi')" class="mt-4 w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
+                    <h3 class="text-2xl font-semibold text-gray-900 relative z-10">Tes Mood (Depresi)</h3>
+                    <p class="text-gray-600 mt-2 flex-1 relative z-10">Merasa sedih belakangan ini? Cek mood-mu (5 pertanyaan).</p>
+                    <button onclick="startTest('depresi')" class="mt-4 w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95 relative z-10">
                         Mulai Tes
                     </button>
                 </div>
@@ -628,7 +661,7 @@
 
     <!-- Navigasi Bawah Horizontal (FLOATING & RESPONSIVE) -->
     <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.05)] p-3 flex justify-around items-center
-                            md:bottom-6 md:left-1/2 md:-translate-x-1/2 md:right-auto md:rounded-full md:space-x-4">
+                            md:bottom-6 md:left-1/2 md:-translate-x-1/2 md:right-auto md:rounded-full md:space-x-4 hidden opacity-0">
         <!-- Tombol Home -->
         <button id="nav-home-btn" onclick="showPage('page-home')" class="bottom-nav-btn p-2 flex flex-col items-center group active">
              <span class="nav-icon p-3 rounded-full">
@@ -727,6 +760,30 @@
                 answer: "Waktu lagi suntuk, tiba-tiba teman lama chat ngajak main. Jadi senyum-senyum sendiri."
             }
         ];
+
+        // --- FUNGSI MASUK APLIKASI (BARU) ---
+        function enterApp() {
+            const welcomePage = document.getElementById('page-welcome');
+            const mainContent = document.getElementById('screen-content');
+            const navBar = document.getElementById('bottom-nav');
+
+            // Fade out welcome screen
+            welcomePage.classList.add('opacity-0');
+            
+            setTimeout(() => {
+                welcomePage.classList.add('hidden');
+                
+                // Fade in main app
+                mainContent.classList.remove('hidden', 'opacity-0');
+                navBar.classList.remove('hidden', 'opacity-0');
+                mainContent.classList.add('opacity-100');
+                navBar.classList.add('opacity-100');
+                
+                // Show the home page
+                showPage('page-home');
+            }, 500); // Tunggu transisi fade-out selesai
+        }
+
 
         // --- KONTROL HALAMAN (GANTI SISTEM KE PAGE, BUKAN MODAL) ---
         function showPage(pageId) {
@@ -1291,7 +1348,8 @@
 
         // Inisialisasi: Tampilkan halaman home saat pertama kali dimuat
         document.addEventListener('DOMContentLoaded', () => {
-            showPage('page-home');
+            // Tidak memanggil showPage('page-home') lagi,
+            // Cukup biarkan #page-welcome tampil secara default
         });
     </script>
 
