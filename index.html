@@ -48,10 +48,18 @@
         /* (DIHAPUS) Style untuk Nav Bar Bawah LAMA */
         /* ... Style #bottom-nav dan .bottom-nav-btn dihapus ... */
 
-        /* Halaman Welcome (Responsive FIX) */
+        /* ======================================================== */
+        /* ===== (MODIFIKASI) Halaman Welcome (Responsive FIX) ===== */
+        /* ======================================================== */
         #page-welcome {
             transition: opacity 0.5s ease-in-out;
             min-height: 100vh; 
+            /* (BARU) Tambahan untuk memastikan welcome screen ada di atas */
+            position: fixed; /* Mengatur posisi agar bisa menggunakan z-index */
+            top: 0;
+            left: 0;
+            width: 100%; /* Pastikan menutupi seluruh layar */
+            z-index: 60; /* z-index tertinggi agar di atas modal (z-50) */
         }
 
         /* Animasi untuk lingkaran pernapasan */
@@ -322,9 +330,9 @@
                     <!-- Tombol Logout -->
                     <div id="logout-btn-container">
                          <button id="logout-btn" onclick="logout()" class="group flex w-full items-center space-x-3 rounded-lg p-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                            <span>Keluar</span>
-                        </button>
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                             <span>Keluar</span>
+                         </button>
                     </div>
                 </div>
 
@@ -702,7 +710,7 @@
                         <!-- Kartu Poin Berwarna + IKON PERMATA -->
                         <div class="bg-gradient-to-br from-indigo-500 to-blue-600 text-white p-6 rounded-xl shadow-lg text-center card-hover">
                             <h3 class="text-xl font-semibold text-white flex items-center justify-center space-x-2">
-                               <!-- (MODIFIKASI) Ikon Koin diganti Ikon Permata (Gem) -->
+                                <!-- (MODIFIKASI) Ikon Koin diganti Ikon Permata (Gem) -->
                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M6 3h12l4 6-10 13L2 9Z"></path><path d="M12 22 2 9"></path><path d="m22 9-4-6"></path></svg>
                                 <span>Total Poin Refleksi</span>
                             </h3>
@@ -1016,7 +1024,7 @@
 
     <script>
         // --- KONFIGURASI API GEMINI ---
-        const apiKey = "AIzaSyCysNy2-QedkfKFJBeI5an9olKi8wFto2U"; // API Key
+        const apiKey = "AIzaSyCysNy2-QedkfKFJBeI5an9olKi8wFto2U"; // API Key (Sengaja dikosongkan)
         const modelName = "gemini-2.5-flash-preview-09-2025";
         const apiUrlBase = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
@@ -1349,8 +1357,7 @@
                 loadingElement.classList.remove('hidden');
                 promptElement.textContent = "Sedang memuat...";
 
-                const systemPrompt = "Berikan pertanyaan reflektif tentang hari ini, bisa seperti hal yang disyukuri, hal yang dihadapi, atau hal yang terjadi, atau hal2 lainnya. Intinya tentang hari ini
-";
+                const systemPrompt = "Berikan satu pertanyaan reflektif singkat (1 kalimat) untuk jurnal harian jadi pertanyaannya lebih ke hari ini. Fokus pada rasa syukur, pencapaian kecil, kejadian hari ini atau perasaan saat ini. Berikan dalam Bahasa Indonesia.";
                 const userQuery = `Generate a reflective question. The user's last mood recorded was ${currentMood}.`;
                 
                 try {
@@ -1980,5 +1987,3 @@
 
 </body>
 </html>
-
-
