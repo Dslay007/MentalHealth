@@ -1024,7 +1024,7 @@
 
     <script>
         // --- KONFIGURASI API GEMINI ---
-        const apiKey = "AIzaSyCysNy2-QedkfKFJBeI5an9olKi8wFto2U"; // API Key (Sengaja dikosongkan)
+        const apiKey = ""; // API Key (Sengaja dikosongkan)
         const modelName = "gemini-2.5-flash-preview-09-2025";
         const apiUrlBase = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
@@ -1357,7 +1357,7 @@
                 loadingElement.classList.remove('hidden');
                 promptElement.textContent = "Sedang memuat...";
 
-                const systemPrompt = "Berikan satu pertanyaan reflektif singkat (1 kalimat) untuk jurnal harian jadi pertanyaannya lebih ke hari ini. Fokus pada rasa syukur, pencapaian kecil, kejadian hari ini atau perasaan saat ini. Berikan dalam Bahasa Indonesia.";
+                const systemPrompt = "Berikan satu pertanyaan reflektif singkat (1 kalimat) untuk jurnal harian. Fokus pada rasa syukur, pencapaian kecil, atau perasaan saat ini. Berikan dalam Bahasa Indonesia.";
                 const userQuery = `Generate a reflective question. The user's last mood recorded was ${currentMood}.`;
                 
                 try {
