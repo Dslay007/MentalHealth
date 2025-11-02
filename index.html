@@ -1401,13 +1401,15 @@
 
             try {
                 const aiResponse = await callGeminiApi(aiQuery, systemPromptChat);
+                const formattedResponse = formatAiResponse(aiResponse); // (MODIFIKASI)
                 
                 // 3. Tampilkan jawaban AI
                 const aiBubble = document.createElement('div');
                 aiBubble.className = "chat-bubble flex justify-start";
+                 // (MODIFIKASI) Menggunakan div dengan space-y-2 dan response yang diformat
                 aiBubble.innerHTML = `
-                    <div class="bg-gray-700 text-gray-100 p-3 md:p-4 rounded-t-2xl rounded-br-2xl max-w-lg">
-                        <p>${aiResponse}</p>
+                    <div class="bg-gray-700 text-gray-100 p-3 md:p-4 rounded-t-2xl rounded-br-2xl max-w-lg text-white space-y-2">
+                        ${formattedResponse}
                     </div>
                 `;
                 chatMessages.replaceChild(aiBubble, typingBubble);
@@ -1428,6 +1430,35 @@
             }
         });
 
+
+        // --- (BARU) FUNGSI PARSER MARKDOWN SEDERHANA ---
+        function formatAiResponse(text) {
+            let html = text;
+            
+            // 1. Headings (must be at start of line)
+            html = html.replace(/^### (.*)$/gm, '<h3 class="font-semibold text-lg mb-2 mt-4">$1</h3>');
+            
+            // 2. Bold and Italic
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+            // 3. Lists (wrap in <ol> and <li>)
+            // This regex finds blocks of numbered lines
+            html = html.replace(/^((\d+)\. (.*\n?))+/gm, (match) => {
+                const items = match.trim().split('\n');
+                const listItems = items.map(item => `<li>${item.replace(/^\d+\.\s/, '')}</li>`).join('');
+                return `<ol class="list-decimal list-inside space-y-1 my-2">${listItems}</ol>`;
+            });
+
+            // 4. Paragraphs (replace remaining newlines with <br>)
+            html = html.replace(/\n/g, '<br>');
+            
+            // 5. Clean up <br> tags next to block elements
+            html = html.replace(/<br>(<\/?(ol|li|h3))/g, '$1');
+            html = html.replace(/(<\/(ol|li|h3))><br>/g, '$1');
+
+            return html;
+        }
 
         // --- LOGIKA CUSTOM ALERT ---
         function showCustomAlert(message, type = 'success') {
@@ -1504,8 +1535,8 @@
 
             function updateCarousel() {
                 // (MODIFIKASI) Menggeser track menggunakan %
-                const offsetPercentage = -currentQuoteIndex * (100 / quotes.length);
-                track.style.transform = `translateX(-${currentQuoteIndex * 100}%)`;
+                const offsetPercentage = currentQuoteIndex * (100 / quotes.length);
+                track.style.transform = `translateX(-${offsetPercentage}%)`;
 
                 const allDots = dotsContainer.querySelectorAll('button');
                 allDots.forEach((dot, index) => {
@@ -1536,4 +1567,6 @@
 
 </body>
 </html>
+
+
 
