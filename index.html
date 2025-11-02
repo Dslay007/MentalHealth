@@ -322,14 +322,31 @@
                     </div>
                     <!-- Kartu Pertanyaan Reflektif (Dark Mode) -->
                     <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-700">
-                        <div class="flex justify-between items-center mb-2">
+                        <div id="journal-prompt-header" class="flex justify-between items-center mb-2">
                             <h3 class="font-semibold text-gray-400">Pertanyaan Hari Ini:</h3>
-                            <button onclick="loadJournalPrompt(true)" class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-all flex items-center space-x-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12h-4"></path><path d="M17 5v14"></path><path d="M22 17l-5 5-5-5"></path><path d="M12 2v20"></path></svg>
-                                <span>Ganti Prompt (AI)</span>
-                            </button>
+                            <div class="flex space-x-2">
+                                <button onclick="loadJournalPrompt(true)" class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-all flex items-center space-x-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12h-4"></path><path d="M17 5v14"></path><path d="M22 17l-5 5-5-5"></path><path d="M12 2v20"></path></svg>
+                                    <span>Ganti (AI)</span>
+                                </button>
+                                <!-- (BARU) Tombol Tulis Sendiri -->
+                                <button onclick="toggleCustomPrompt(true)" class="text-sm font-semibold text-gray-400 hover:text-white transition-all flex items-center space-x-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
+                                    <span>Tulis Sendiri</span>
+                                </button>
+                            </div>
                         </div>
                         <p id="journal-prompt" class="text-lg md:text-xl font-medium text-white mt-2">Apa satu hal kecil yang kamu syukuri hari ini?</p>
+                        
+                        <!-- (BARU) Input Pertanyaan Kustom -->
+                        <div id="custom-prompt-container" class="hidden space-y-2 mt-2">
+                            <label for="custom-journal-prompt" class="text-sm font-semibold text-gray-400">Tulis pertanyaanmu sendiri:</label>
+                            <input type="text" id="custom-journal-prompt" class="w-full p-2 bg-gray-700 border-gray-600 text-white placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Misal: Apa yang aku pelajari hari ini?">
+                            <button onclick="toggleCustomPrompt(false)" class="text-sm font-semibold text-gray-400 hover:text-white transition-all">
+                                Batal
+                            </button>
+                        </div>
+
                         <p id="journal-prompt-loading" class="text-sm italic text-indigo-400 mt-2 hidden">Meminta prompt reflektif dari Soul-AI...</p>
                     </div>
                     <!-- Text Area (Dark Mode) -->
@@ -781,7 +798,7 @@
 
     <script>
         // --- KONFIGURASI API GEMINI ---
-        const apiKey = "AIzaSyCysNy2-QedkfKFJBeI5an9olKi8wFto2U"; // API Key
+        const apiKey = ""; // API Key
         const modelName = "gemini-2.5-flash-preview-09-2025";
         const apiUrlBase = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
@@ -997,12 +1014,15 @@
             document.getElementById('journal-input').value = ""; 
             const promptElement = document.getElementById('journal-prompt');
             const loadingElement = document.getElementById('journal-prompt-loading');
+            
+            // (BARU) Selalu reset ke tampilan prompt default
+            toggleCustomPrompt(false); 
 
             if (useGemini) {
                 loadingElement.classList.remove('hidden');
                 promptElement.textContent = "Sedang memuat...";
 
-                const systemPrompt = "Act as a creative reflection guide. Generate a single, concise, and intriguing journaling question. The question should be short but make the user think deeply (menarik untuk dikulik). The response MUST be ONLY the question itself, without any introductory phrases. Use Indonesian.";
+                const systemPrompt = "Buat satu pertanyaan jurnal reflektif dalam bahasa Indonesia yang terasa alami, sederhana, dan tidak berlebihan—seolah-olah ditanya oleh teman yang hangat dan penuh empati. Variasikan kedalamannya: kadang ringan dan sehari-hari, kadang lebih dalam dan introspektif. Tema bisa seputar emosi, rasa syukur, pengalaman kecil, relasi, pertumbuhan diri, atau makna hidup. Pertanyaan harus singkat (maksimal 1 kalimat), membuat orang ingin berhenti sejenak untuk berpikir, dan hasilkan hanya pertanyaannya saja tanpa kalimat pembuka atau penjelasan tambahan.";
                 const userQuery = `Generate a reflective question. The user's last mood recorded was ${currentMood}.`;
                 
                 try {
@@ -1033,7 +1053,23 @@
 
         function saveJournal() {
             const answer = document.getElementById('journal-input').value;
-            const question = document.getElementById('journal-prompt').textContent;
+            
+            // (MODIFIKASI) Cek pertanyaan mana yang aktif
+            const customPromptContainer = document.getElementById('custom-prompt-container');
+            let question = "";
+
+            if (!customPromptContainer.classList.contains('hidden')) {
+                // Gunakan prompt kustom
+                question = document.getElementById('custom-journal-prompt').value;
+                if (question.trim() === "") {
+                    showCustomAlert("Pertanyaan kustom tidak boleh kosong!", "error");
+                    return;
+                }
+            } else {
+                // Gunakan prompt default/AI
+                question = document.getElementById('journal-prompt').textContent;
+            }
+            
             if(answer.trim() === "") {
                 showCustomAlert("Jurnal tidak boleh kosong!", "error");
                 return;
@@ -1460,6 +1496,28 @@
             return html;
         }
 
+        // --- (BARU) FUNGSI UNTUK TOGGLE PROMPT JURNAL ---
+        function toggleCustomPrompt(show) {
+            const defaultPrompt = document.getElementById('journal-prompt');
+            const defaultButtons = document.getElementById('journal-prompt-header');
+            const customContainer = document.getElementById('custom-prompt-container');
+            const customInput = document.getElementById('custom-journal-prompt');
+
+            if (show) {
+                // Tampilkan input kustom
+                defaultPrompt.classList.add('hidden');
+                defaultButtons.classList.add('hidden');
+                customContainer.classList.remove('hidden');
+                customInput.value = '';
+                customInput.focus();
+            } else {
+                // Tampilkan prompt default
+                defaultPrompt.classList.remove('hidden');
+                defaultButtons.classList.remove('hidden');
+                customContainer.classList.add('hidden');
+            }
+        }
+
         // --- LOGIKA CUSTOM ALERT ---
         function showCustomAlert(message, type = 'success') {
             const alertBox = document.getElementById('custom-alert');
@@ -1567,6 +1625,3 @@
 
 </body>
 </html>
-
-
-
