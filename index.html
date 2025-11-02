@@ -45,8 +45,9 @@
 
         /* Scrollbar kustom untuk Histori Jurnal */
         #journal-history-list::-webkit-scrollbar { width: 5px; }
-        #journal-history-list::-webkit-scrollbar-track { background: #e9e9e9; }
-        #journal-history-list::-webkit-scrollbar-thumb { background: #b0a8db; border-radius: 10px; }
+        /* (MODIFIKASI) Scrollbar dark mode */
+        #journal-history-list::-webkit-scrollbar-track { background: #4b5563; } /* bg-gray-600 */
+        #journal-history-list::-webkit-scrollbar-thumb { background: #818cf8; border-radius: 10px; } /* bg-indigo-400 */
 
 
         /* Style untuk Nav Bar Bawah BARU (FLOATING & RESPONSIVE) */
@@ -214,19 +215,21 @@
 </head>
 <body class="min-h-screen">
 
-    <!-- Halaman Welcome (Responsive FIX) -->
-    <div id="page-welcome" onclick="enterApp()" class="flex flex-col items-center justify-center w-screen cursor-pointer bg-gradient-to-br from-indigo-50 to-purple-50 p-8 text-center min-h-screen">
+    <!-- (MODIFIKASI) Halaman Welcome (Dark Mode) -->
+    <div id="page-welcome" onclick="enterApp()" class="flex flex-col items-center justify-center w-screen cursor-pointer bg-gradient-to-br from-gray-800 to-indigo-900 p-8 text-center min-h-screen">
         <!-- Ilustrasi Digital BARU -->
         <div class="w-full max-w-sm md:max-w-md">
             <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <path fill="#C7D2FE" d="M48.1,-63.3C61.4,-52.1,70.5,-36.3,75.1,-18.9C79.7,-1.5,80,17.4,70.7,30.3C61.5,43.2,42.8,49.9,26.4,56.7C10.1,63.5,-3.8,70.2,-19.1,68C-34.4,65.8,-51.1,54.7,-62.4,40.1C-73.7,25.6,-79.6,7.6,-77.3,-9.3C-75,-26.2,-64.5,-42,-50.9,-53.2C-37.3,-64.3,-20.6,-70.8,-3,-69.6C14.6,-68.4,29.3,-70.4,48.1,-63.3Z" transform="translate(100 100) scale(0.9)" />
-                <text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="90" font-family="Inter, sans-serif" fill="#4F46E5" font-weight="bold">🧘</text>
+                <!-- (MODIFIKASI) Blob digelapkan, emoji diterangkan -->
+                <path fill="#4f46e5" d="M48.1,-63.3C61.4,-52.1,70.5,-36.3,75.1,-18.9C79.7,-1.5,80,17.4,70.7,30.3C61.5,43.2,42.8,49.9,26.4,56.7C10.1,63.5,-3.8,70.2,-19.1,68C-34.4,65.8,-51.1,54.7,-62.4,40.1C-73.7,25.6,-79.6,7.6,-77.3,-9.3C-75,-26.2,-64.5,-42,-50.9,-53.2C-37.3,-64.3,-20.6,-70.8,-3,-69.6C14.6,-68.4,29.3,-70.4,48.1,-63.3Z" transform="translate(100 100) scale(0.9)" />
+                <text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="90" font-family="Inter, sans-serif" fill="#c7d2fe" font-weight="bold">🧘</text>
             </svg>
         </div>
         
-        <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mt-8">Selamat Datang di SoulCare</h1>
-        <p class="text-base md:text-xl text-gray-600 mt-4 max-w-lg">Ruang aman digitalmu untuk refleksi, tes, dan penguatan kesehatan mental.</p>
-        <p class="text-lg md:text-2xl font-semibold text-indigo-600 mt-12 animate-pulse">Klik di mana saja untuk memulai</p>
+        <!-- (MODIFIKASI) Teks jadi putih -->
+        <h1 class="text-3xl md:text-5xl font-bold text-white mt-8">Selamat Datang di SoulCare</h1>
+        <p class="text-base md:text-xl text-gray-300 mt-4 max-w-lg">Ruang aman digitalmu untuk refleksi, tes, dan penguatan kesehatan mental.</p>
+        <p class="text-lg md:text-2xl font-semibold text-indigo-300 mt-12 animate-pulse">Klik di mana saja untuk memulai</p>
     </div>
 
 
@@ -372,41 +375,41 @@
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- Kolom Kiri: Input Jurnal -->
                 <div class="lg:w-1/2 space-y-6">
-                    <!-- Pelacak Mood (Biarkan putih untuk fokus) -->
-                    <div class="bg-white p-6 rounded-2xl shadow-lg">
-                        <h3 class="font-semibold text-gray-600 mb-4 text-base md:text-lg text-center">Bagaimana mood-mu untuk entri ini?</h3>
+                    <!-- (MODIFIKASI) Pelacak Mood (Dark Mode) -->
+                    <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg">
+                        <h3 class="font-semibold text-gray-300 mb-4 text-base md:text-lg text-center">Bagaimana mood-mu untuk entri ini?</h3>
                         <div class="flex justify-around" id="mood-selection">
-                            <button onclick="selectMood('😭', this)" class="mood-btn p-2 md:p-3 rounded-full hover:bg-red-100 transition-all active:scale-95 ring-0 ring-red-400">
+                            <button onclick="selectMood('😭', this)" class="mood-btn p-2 md:p-3 rounded-full hover:bg-red-900/50 transition-all active:scale-95 ring-0 ring-red-400">
                                 <span class="text-3xl md:text-4xl">😭</span>
                             </button>
-                             <button onclick="selectMood('😟', this)" class="mood-btn p-2 md:p-3 rounded-full hover:bg-yellow-100 transition-all active:scale-95 ring-0 ring-yellow-400">
+                             <button onclick="selectMood('😟', this)" class="mood-btn p-2 md:p-3 rounded-full hover:bg-yellow-900/50 transition-all active:scale-95 ring-0 ring-yellow-400">
                                 <span class="text-3xl md:text-4xl">😟</span>
                             </button>
-                             <button onclick="selectMood('😌', this)" class="mood-btn p-2 md:p-3 rounded-full hover:bg-blue-100 transition-all active:scale-95 ring-0 ring-blue-400">
+                             <button onclick="selectMood('😌', this)" class="mood-btn p-2 md:p-3 rounded-full hover:bg-blue-900/50 transition-all active:scale-95 ring-0 ring-blue-400">
                                 <span class="text-3xl md:text-4xl">😌</span>
                             </button>
-                             <button onclick="selectMood('😊', this)" class="mood-btn p-2 md:p-3 rounded-full hover:bg-indigo-100 transition-all active:scale-95 ring-0 ring-indigo-400">
+                             <button onclick="selectMood('😊', this)" class="mood-btn p-2 md:p-3 rounded-full hover:bg-indigo-900/50 transition-all active:scale-95 ring-0 ring-indigo-400">
                                 <span class="text-3xl md:text-4xl">😊</span>
                             </button>
-                            <button onclick="selectMood('🤩', this)" class="mood-btn p-2 md:p-3 rounded-full hover:bg-green-100 transition-all active:scale-95 ring-0 ring-green-400">
+                            <button onclick="selectMood('🤩', this)" class="mood-btn p-2 md:p-3 rounded-full hover:bg-green-900/50 transition-all active:scale-95 ring-0 ring-green-400">
                                 <span class="text-3xl md:text-4xl">🤩</span>
                             </button>
                         </div>
                     </div>
-                    <!-- Kartu Pertanyaan Reflektif (Biarkan putih untuk fokus) -->
-                    <div class="bg-white p-6 rounded-2xl shadow-lg">
-                        <h3 class="font-semibold text-gray-500">Pertanyaan Hari Ini:</h3>
-                        <p id="journal-prompt" class="text-lg md:text-xl font-medium text-gray-900 mt-2">Apa satu hal kecil yang kamu syukuri hari ini?</p>
+                    <!-- (MODIFIKASI) Kartu Pertanyaan Reflektif (Dark Mode) -->
+                    <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg">
+                        <h3 class="font-semibold text-gray-400">Pertanyaan Hari Ini:</h3>
+                        <p id="journal-prompt" class="text-lg md:text-xl font-medium text-white mt-2">Apa satu hal kecil yang kamu syukuri hari ini?</p>
                     </div>
-                    <!-- Text Area (Biarkan putih untuk fokus) -->
-                    <textarea id="journal-input" class="w-full h-40 p-5 text-base border border-gray-200 rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Tuliskan ceritamu di sini..."></textarea>
+                    <!-- (MODIFIKASI) Text Area (Dark Mode) -->
+                    <textarea id="journal-input" class="w-full h-40 p-5 text-base bg-gray-700/60 border-gray-600 text-white placeholder-gray-400 rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Tuliskan ceritamu di sini..."></textarea>
                     
-                    <!-- Pengingat (Biarkan putih untuk fokus) -->
-                    <div class="bg-white p-5 rounded-xl shadow-lg flex justify-between items-center">
-                        <h3 class="text-sm md:text-base font-semibold text-gray-700">Setel Pengingat Jurnal Harian</h3>
+                    <!-- (MODIFIKASI) Pengingat (Dark Mode) -->
+                    <div class="bg-gray-800/50 backdrop-blur-sm p-5 rounded-xl shadow-lg flex justify-between items-center">
+                        <h3 class="text-sm md:text-base font-semibold text-gray-100">Setel Pengingat Jurnal Harian</h3>
                         <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
                             <input type="checkbox" name="toggle" id="journal-reminder" class="toggle-checkbox absolute w-full h-full opacity-0 z-10 cursor-pointer"/>
-                            <label for="journal-reminder" class="toggle-label block overflow-hidden h-7 w-12 rounded-full bg-gray-300 cursor-pointer transition-colors duration-200 ease-in-out relative">
+                            <label for="journal-reminder" class="toggle-label block overflow-hidden h-7 w-12 rounded-full bg-gray-600 cursor-pointer transition-colors duration-200 ease-in-out relative">
                                  <span class="toggle-dot absolute left-1 top-1 inline-block w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ease-in-out"></span>
                             </label>
                         </div>
@@ -418,16 +421,16 @@
                     </button>
                 </div>
                 
-                <!-- Kolom Kanan: Histori Jurnal (Biarkan putih untuk fokus) -->
-                <div class="lg:w-1/2 bg-white p-6 rounded-2xl shadow-lg flex flex-col">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Histori Jurnal</h3>
-                    <!-- Search & Filter -->
+                <!-- (MODIFIKASI) Kolom Kanan: Histori Jurnal (Dark Mode) -->
+                <div class="lg:w-1/2 bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg flex flex-col">
+                    <h3 class="text-2xl font-bold text-white mb-4">Histori Jurnal</h3>
+                    <!-- Search & Filter (Dark Mode) -->
                     <div class="flex flex-col md:flex-row gap-3 mb-4">
                         <div class="relative flex-grow">
-                            <input type="search" id="journal-search" onkeyup="renderJournalHistory()" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Cari di jurnal...">
+                            <input type="search" id="journal-search" onkeyup="renderJournalHistory()" class="w-full pl-10 pr-4 py-2 bg-gray-700 border-gray-600 text-white placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Cari di jurnal...">
                             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                         </div>
-                        <select id="journal-sort" onchange="renderJournalHistory()" class="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                        <select id="journal-sort" onchange="renderJournalHistory()" class="bg-gray-700 border-gray-600 text-white rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-400">
                             <option value="terbaru">Sortir: Terbaru</option>
                             <option value="terlama">Sortir: Terlama</option>
                         </select>
@@ -511,20 +514,21 @@
         <div id="page-game-breathe" class="page p-6 md:p-12 hidden">
             <!-- Header Halaman -->
             <div class="flex items-center space-x-3 mb-8">
-                <button onclick="stopBreatheGame(); showPage('page-games');" class="p-2 rounded-full hover:bg-gray-200 active:scale-95">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <!-- (MODIFIKASI) Tombol back dark mode -->
+                <button onclick="stopBreatheGame(); showPage('page-games');" class="p-2 bg-white/10 hover:bg-white/20 rounded-full active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 </button>
                 <!-- (MODIFIKASI) Teks jadi putih -->
                 <h1 class="text-3xl md:text-4xl font-bold text-white">Tarik Napas</h1>
             </div>
-            <!-- Konten Game (Biarkan putih untuk fokus) -->
-            <div class="flex flex-col items-center justify-center h-[60vh] text-center bg-white rounded-2xl shadow-lg">
+            <!-- (MODIFIKASI) Konten Game (Dark Mode) -->
+            <div class="flex flex-col items-center justify-center h-[60vh] text-center bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg">
                 <div class="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
                     <div class="absolute w-full h-full bg-blue-200 rounded-full breathing-circle"></div>
                     <div class="absolute w-3/4 h-3/4 md:w-48 md:h-48 bg-blue-300 rounded-full breathing-circle" style="animation-delay: -0.5s;"></div>
                     <div class="absolute w-1/2 h-1/2 md:w-32 md:h-32 bg-blue-400 rounded-full breathing-circle" style="animation-delay: -1s;"></div>
                 </div>
-                <p id="breathe-text" class="text-2xl md:text-3xl font-semibold text-gray-800 mt-16">Siap?</p>
+                <p id="breathe-text" class="text-2xl md:text-3xl font-semibold text-white mt-16">Siap?</p>
             </div>
         </div>
 
@@ -532,18 +536,19 @@
         <div id="page-game-filter" class="page p-6 md:p-12 hidden">
             <!-- Header Halaman -->
             <div class="flex items-center space-x-3 mb-8">
-                <button onclick="showPage('page-games');" class="p-2 rounded-full hover:bg-gray-200 active:scale-95">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <!-- (MODIFIKASI) Tombol back dark mode -->
+                <button onclick="showPage('page-games');" class="p-2 bg-white/10 hover:bg-white/20 rounded-full active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 </button>
                 <!-- (MODIFIKASI) Teks jadi putih -->
                 <h1 class="text-3xl md:text-4xl font-bold text-white">Filter Pikiran</h1>
             </div>
-            <!-- Konten Game (Biarkan putih untuk fokus) -->
-            <div class="flex flex-col items-center justify-center h-[60vh] text-center bg-white rounded-2xl shadow-lg p-6 md:p-10">
-                <p class="text-lg md:text-2xl text-gray-600">Apakah pikiran ini...</p>
-                <!-- Kartu Pikiran -->
-                <div id="thought-card" class="thought-card bg-gray-100 p-6 md:p-8 rounded-2xl shadow-inner w-full max-w-lg my-6 min-h-[150px] flex items-center justify-center">
-                    <p id="thought-text" class="text-xl md:text-3xl font-medium text-gray-800">Saya pasti akan gagal dalam presentasi ini.</p>
+            <!-- (MODIFIKASI) Konten Game (Dark Mode) -->
+            <div class="flex flex-col items-center justify-center h-[60vh] text-center bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg p-6 md:p-10">
+                <p class="text-lg md:text-2xl text-gray-300">Apakah pikiran ini...</p>
+                <!-- Kartu Pikiran (Dark Mode) -->
+                <div id="thought-card" class="thought-card bg-gray-700/60 p-6 md:p-8 rounded-2xl shadow-inner w-full max-w-lg my-6 min-h-[150px] flex items-center justify-center">
+                    <p id="thought-text" class="text-xl md:text-3xl font-medium text-white">Saya pasti akan gagal dalam presentasi ini.</p>
                 </div>
                 <!-- Tombol Pilihan -->
                 <div class="w-full max-w-lg flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4">
@@ -590,34 +595,34 @@
                         <span id="total-points" class="text-5xl font-bold text-white mt-3 block">120</span>
                     </div>
                 </div>
-                <!-- Kolom Kanan: Pencapaian (Biarkan putih untuk fokus) -->
-                <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg card-hover">
+                <!-- (MODIFIKASI) Kolom Kanan: Pencapaian (Dark Mode) -->
+                <div class="lg:col-span-2 bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-lg card-hover">
                     <div class="relative z-10">
-                        <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Lencana Pencapaian</h3>
+                        <h3 class="text-2xl font-semibold text-white mb-6 text-center">Lencana Pencapaian</h3>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
                             <!-- Lencana 1 -->
-                            <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
+                            <div class="text-center p-4 bg-gray-700/60 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
                                 <span class="text-6xl">🧘</span>
-                                <p class="text-md font-semibold text-gray-700 mt-2">Pikiran Tenang</p>
-                                <p class="text-xs text-gray-500 mt-1">Selesaikan 5x mini-game "Tarik Napas".</p>
+                                <p class="text-md font-semibold text-gray-100 mt-2">Pikiran Tenang</p>
+                                <p class="text-xs text-gray-400 mt-1">Selesaikan 5x mini-game "Tarik Napas".</p>
                             </div>
                             <!-- Lencana 2 -->
-                            <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
+                            <div class="text-center p-4 bg-gray-700/60 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
                                 <span class="text-6xl">✍️</span>
-                                <p class="text-md font-semibold text-gray-700 mt-2">Penulis Jurnal</p>
-                                <p class="text-xs text-gray-500 mt-1">Tulis jurnal 3 hari berturut-turut.</p>
+                                <p class="text-md font-semibold text-gray-100 mt-2">Penulis Jurnal</p>
+                                <p class="text-xs text-gray-400 mt-1">Tulis jurnal 3 hari berturut-turut.</p>
                             </div>
                             <!-- Lencana 3 -->
-                            <div class="text-center p-4 bg-gray-100 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
+                            <div class="text-center p-4 bg-gray-700/60 rounded-lg transition-all hover:scale-105 shadow flex flex-col items-center">
                                 <span class="text-6xl">🧠</span>
-                                <p class="text-md font-semibold text-gray-700 mt-2">Penyaring Pikiran</p>
-                                <p class="text-xs text-gray-500 mt-1">Mainkan 10x "Filter Pikiran".</p>
+                                <p class="text-md font-semibold text-gray-100 mt-2">Penyaring Pikiran</p>
+                                <p class="text-xs text-gray-400 mt-1">Mainkan 10x "Filter Pikiran".</p>
                             </div>
                             <!-- Lencana 4 (Terkunci) -->
-                            <div class="text-center p-4 bg-gray-100 rounded-lg opacity-40 transition-all hover:scale-105 shadow flex flex-col items-center">
+                            <div class="text-center p-4 bg-gray-700/60 rounded-lg opacity-40 transition-all hover:scale-105 shadow flex flex-col items-center">
                                 <span class="text-6xl">💪</span>
-                                <p class="text-md font-semibold text-gray-700 mt-2">Mental Kuat</p>
-                                <p class="text-xs text-gray-500 mt-1">Capai 7 hari streak jurnal.</p>
+                                <p class="text-md font-semibold text-gray-100 mt-2">Mental Kuat</p>
+                                <p class="text-xs text-gray-400 mt-1">Capai 7 hari streak jurnal.</p>
                             </div>
                         </div>
                     </div>
@@ -691,14 +696,14 @@
                 <p class="text-base md:text-lg text-gray-300 mt-1">Berikut adalah ringkasan kondisimu selama seminggu terakhir.</p>
             </div>
             <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Kolom Kiri: Grafik (Biarkan putih untuk fokus) -->
-                <div class="lg:col-span-2 bg-white p-6 md:p-8 rounded-2xl shadow-lg">
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-8">Grafik Visual Kondisi</h3>
+                <!-- (MODIFIKASI) Kolom Kiri: Grafik (Dark Mode) -->
+                <div class="lg:col-span-2 bg-gray-800/50 backdrop-blur-sm p-6 md:p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-semibold text-white mb-8">Grafik Visual Kondisi</h3>
                     <div class="space-y-6">
                         <!-- Bar Stres -->
                         <div id="chart-stres-container">
-                            <span class="text-lg font-semibold text-red-700">Stres</span>
-                            <div class="flex-1 bg-gray-200 rounded-full h-6 mt-2 shadow-inner">
+                            <span class="text-lg font-semibold text-red-400">Stres</span>
+                            <div class="flex-1 bg-black/20 rounded-full h-6 mt-2 shadow-inner">
                                 <div id="chart-stres" class="chart-bar bg-gradient-to-r from-red-400 to-red-600 h-6 rounded-full flex items-center justify-end pr-3">
                                     <span class="text-sm font-bold text-white">Tinggi</span>
                                 </div>
@@ -706,8 +711,8 @@
                         </div>
                         <!-- Bar Kecemasan -->
                         <div id="chart-cemas-container">
-                            <span class="text-lg font-semibold text-yellow-700">Kecemasan</span>
-                            <div class="flex-1 bg-gray-200 rounded-full h-6 mt-2 shadow-inner">
+                            <span class="text-lg font-semibold text-yellow-400">Kecemasan</span>
+                            <div class="flex-1 bg-black/20 rounded-full h-6 mt-2 shadow-inner">
                                 <div id="chart-cemas" class="chart-bar bg-gradient-to-r from-yellow-400 to-yellow-600 h-6 rounded-full flex items-center justify-end pr-3">
                                     <span class="text-sm font-bold text-white">Sedang</span>
                                 </div>
@@ -715,8 +720,8 @@
                         </div>
                         <!-- Bar Depresi -->
                         <div id="chart-depresi-container">
-                            <span class="text-lg font-semibold text-blue-700">Depresi</span>
-                            <div class="flex-1 bg-gray-200 rounded-full h-6 mt-2 shadow-inner">
+                            <span class="text-lg font-semibold text-blue-400">Depresi</span>
+                            <div class="flex-1 bg-black/20 rounded-full h-6 mt-2 shadow-inner">
                                 <div id="chart-depresi" class="chart-bar bg-gradient-to-r from-blue-400 to-blue-600 h-6 rounded-full flex items-center justify-end pr-3">
                                     <span class="text-sm font-bold text-white">Rendah</span>
                                 </div>
@@ -752,22 +757,22 @@
                 <h1 class="text-3xl md:text-4xl font-bold text-white">Soul-AI Chat</h1>
                 <p class="text-base md:text-lg text-gray-300 mt-1">Teman refleksi digitalmu. Aman, anonim, dan selalu ada.</p>
             </div>
-            <!-- Konten Chat (Biarkan putih untuk fokus) -->
-            <div class="mt-6 bg-white h-[65vh] rounded-2xl shadow-lg flex flex-col">
+            <!-- (MODIFIKASI) Konten Chat (Dark Mode) -->
+            <div class="mt-6 bg-gray-800/50 backdrop-blur-sm h-[65vh] rounded-2xl shadow-lg flex flex-col">
                 <!-- Area Pesan -->
                 <div id="chat-messages" class="flex-1 p-4 md:p-6 space-y-4 overflow-y-auto">
-                    <!-- Pesan Awal AI -->
+                    <!-- Pesan Awal AI (Dark Mode) -->
                     <div class="chat-bubble flex justify-start">
-                        <div class="bg-gray-100 text-gray-800 p-3 md:p-4 rounded-t-2xl rounded-br-2xl max-w-lg">
+                        <div class="bg-gray-700 text-gray-100 p-3 md:p-4 rounded-t-2xl rounded-br-2xl max-w-lg">
                             <p>Halo! Aku Soul-AI. Apa yang sedang kamu pikirkan atau rasakan hari ini? Kamu bisa cerita apapun di sini.</p>
                         </div>
                     </div>
                      <!-- Pesan dummy (akan diisi JS) -->
                 </div>
-                <!-- Area Input Teks -->
-                <div class="p-4 bg-gray-50 border-t border-gray-200 rounded-b-2xl">
+                <!-- (MODIFIKASI) Area Input Teks (Dark Mode) -->
+                <div class="p-4 bg-gray-900/50 border-t border-gray-700 rounded-b-2xl">
                     <form id="chat-form" class="flex items-center space-x-3">
-                        <input id="chat-input" type="text" placeholder="Ketik ceritamu di sini..." class="flex-1 p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                        <input id="chat-input" type="text" placeholder="Ketik ceritamu di sini..." class="flex-1 p-4 bg-gray-700 border-gray-600 text-white placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400">
                         <button type="submit" class="p-4 bg-indigo-600 text-white rounded-xl shadow-lg hover:bg-indigo-700 transition-all active:scale-95">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                         </button>
@@ -780,14 +785,16 @@
         <div id="page-game-puzzle" class="page p-6 md:p-12 hidden">
             <!-- Header Halaman -->
             <div class="flex items-center space-x-3 mb-8">
-                <button onclick="showPage('page-games');" class="p-2 rounded-full hover:bg-gray-200 active:scale-95">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <!-- (MODIFIKASI) Tombol back dark mode -->
+                <button onclick="showPage('page-games');" class="p-2 bg-white/10 hover:bg-white/20 rounded-full active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 </button>
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Memory Syukur</h1>
+                <!-- (MODIFIKASI) Teks jadi putih -->
+                <h1 class="text-3xl md:text-4xl font-bold text-white">Memory Syukur</h1>
             </div>
-            <!-- Konten Game -->
-            <div class="flex flex-col items-center justify-center text-center bg-white rounded-2xl shadow-lg p-6 md:p-10">
-                 <p id="puzzle-feedback" class="text-lg md:text-2xl text-gray-600 mb-6">Cari 4 pasang kartu yang cocok!</p>
+            <!-- (MODIFIKASI) Konten Game (Dark Mode) -->
+            <div class="flex flex-col items-center justify-center text-center bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg p-6 md:p-10">
+                 <p id="puzzle-feedback" class="text-lg md:text-2xl text-gray-300 mb-6">Cari 4 pasang kartu yang cocok!</p>
                  <!-- Puzzle Grid -->
                  <div class="relative w-full max-w-md aspect-square">
                     <!-- Pesan Tersembunyi (FIXED z-index) -->
@@ -809,25 +816,26 @@
         <div id="page-game-worry" class="page p-6 md:p-12 hidden">
             <!-- Header Halaman -->
             <div class="flex items-center space-x-3 mb-8">
-                <button onclick="showPage('page-games');" class="p-2 rounded-full hover:bg-gray-200 active:scale-95">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <!-- (MODIFIKASI) Tombol back dark mode -->
+                <button onclick="showPage('page-games');" class="p-2 bg-white/10 hover:bg-white/20 rounded-full active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 </button>
                 <!-- (MODIFIKASI) Teks jadi putih -->
                 <h1 class="text-3xl md:text-4xl font-bold text-white">Toples Kekhawatiran</h1>
             </div>
-            <!-- Konten Game (Biarkan putih untuk fokus) -->
-            <div class="flex flex-col items-center justify-center text-center bg-white rounded-2xl shadow-lg p-6 md:p-10">
-                 <p class="text-lg md:text-2xl text-gray-600 mb-6">Tulis kekhawatiranmu dan masukkan ke dalam toples untuk dilepaskan.</p>
+            <!-- (MODIFIKASI) Konten Game (Dark Mode) -->
+            <div class="flex flex-col items-center justify-center text-center bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg p-6 md:p-10">
+                 <p class="text-lg md:text-2xl text-gray-300 mb-6">Tulis kekhawatiranmu dan masukkan ke dalam toples untuk dilepaskan.</p>
                  
                  <!-- Ilustrasi Toples -->
                  <div class="relative my-4">
                     <svg id="worry-jar-svg" xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="#F472B6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="opacity-30 transition-all duration-500"><path d="M8 2.81v2.32c0 .5.2.98.6 1.35l4.1 3.9c.7.67 1.2 1.5.1 2.45-1.1 1-.4 2.8 1 3.4.9.4 2.1.2 3.1-.4l4.1-3.9c.4-.37.6-.85.6-1.35V2.81"/><path d="M7 21h10"/><path d="M12 21v-2.5c0-.8-.7-1.5-1.5-1.5h-1c-.8 0-1.5.7-1.5 1.5V21"/><path d="M6 18c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2"/><path d="M14 5v.5c0 .3.2.5.5.5h1c.3 0 .5-.2.5-.5V5"/></svg>
                      <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-pink-600 font-bold text-4xl" id="worry-count">0</p>
                  </div>
-                 <p class="text-gray-500 text-sm mb-4">Kekhawatiran di dalam toples</p>
+                 <p class="text-gray-400 text-sm mb-4">Kekhawatiran di dalam toples</p>
                  
-                 <!-- Input -->
-                 <textarea id="worry-input" class="w-full max-w-lg h-24 p-4 text-base border border-gray-200 rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-pink-400" placeholder="Tulis satu kekhawatiranmu di sini..."></textarea>
+                 <!-- (MODIFIKASI) Input (Dark Mode) -->
+                 <textarea id="worry-input" class="w-full max-w-lg h-24 p-4 text-base bg-gray-700/60 border-gray-600 text-white placeholder-gray-400 rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-pink-400" placeholder="Tulis satu kekhawatiranmu di sini..."></textarea>
                  <button onclick="saveWorry()" class="w-full max-w-lg mt-4 bg-gradient-to-r from-pink-500 to-pink-600 text-white font-semibold py-3 px-5 text-lg rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all active:scale-95">
                      Masukkan ke Toples & Lepaskan
                 </button>
@@ -837,6 +845,7 @@
     </main>
 
     <!-- Navigasi Bawah Horizontal (FLOATING & RESPONSIVE - FIXED) -->
+    <!-- (MODIFIKASI) Navigasi tetap putih/terang untuk kontras -->
     <nav id="bottom-nav" class="fixed bottom-4 z-50 bg-white/80 backdrop-blur-md shadow-xl p-3 flex justify-around items-center hidden opacity-0 
                                  left-1/2 -translate-x-1/2 w-[95%] rounded-full
                                  md:w-auto">
@@ -1155,14 +1164,15 @@
                 const dateString = entryDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
                 const timeString = entryDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
+                // (MODIFIKASI) Render item list (Dark Mode)
                 const entryHtml = `
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <div class="bg-gray-700/60 p-4 rounded-lg border border-gray-600">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-2xl">${entry.mood}</span>
-                            <span class="text-sm font-medium text-gray-500">${dateString} - ${timeString}</span>
+                            <span class="text-sm font-medium text-gray-400">${dateString} - ${timeString}</span>
                         </div>
-                        <p class="font-semibold text-gray-700 text-sm mb-1">Pertanyaan: ${entry.question}</p>
-                        <p class="text-gray-600 text-sm truncate">${entry.answer}</p>
+                        <p class="font-semibold text-gray-100 text-sm mb-1">Pertanyaan: ${entry.question}</p>
+                        <p class="text-gray-300 text-sm truncate">${entry.answer}</p>
                     </div>
                 `;
                 listContainer.innerHTML += entryHtml;
@@ -1440,9 +1450,10 @@
             const typingBubble = document.createElement('div');
             typingBubble.className = "chat-bubble flex justify-start";
             typingBubble.id = "typing-indicator";
+            // (MODIFIKASI) Typing bubble dark mode
             typingBubble.innerHTML = `
-                <div class="bg-gray-100 text-gray-800 p-3 md:p-4 rounded-t-2xl rounded-br-2xl max-w-lg">
-                    <p class="italic">Soul-AI sedang mengetik...</p>
+                <div class="bg-gray-700 text-gray-100 p-3 md:p-4 rounded-t-2xl rounded-br-2xl max-w-lg">
+                    <p class="italic text-gray-300">Soul-AI sedang mengetik...</p>
                 </div>
             `;
             chatMessages.appendChild(typingBubble);
@@ -1453,8 +1464,9 @@
                 const aiBubble = document.createElement('div');
                 aiBubble.className = "chat-bubble flex justify-start";
                 const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+                // (MODIFIKASI) AI bubble dark mode
                 aiBubble.innerHTML = `
-                    <div class="bg-gray-100 text-gray-800 p-3 md:p-4 rounded-t-2xl rounded-br-2xl max-w-lg">
+                    <div class="bg-gray-700 text-gray-100 p-3 md:p-4 rounded-t-2xl rounded-br-2xl max-w-lg">
                         <p>${randomResponse}</p>
                     </div>
                 `;
